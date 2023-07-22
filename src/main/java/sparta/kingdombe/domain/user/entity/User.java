@@ -3,6 +3,7 @@ package sparta.kingdombe.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sparta.kingdombe.domain.user.dto.KakaoUserInfoDto;
 import sparta.kingdombe.domain.user.dto.SignupRequestDto;
 
 @Entity
@@ -27,6 +28,8 @@ public class User {
     @Column
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+    @Column
+    private Long kakaoId;
 
     public User(SignupRequestDto requestDto, String password, UserGenderEnum gender, UserRoleEnum role) {
         this.email = requestDto.getEmail();
@@ -35,5 +38,19 @@ public class User {
         this.gender = gender;
         this.enterpriseCode = requestDto.getEnterpriseCode();
         this.role = role;
+    }
+
+    public User(KakaoUserInfoDto kakaoUserInfo, String password, UserRoleEnum role) {
+        this.email = kakaoUserInfo.getEmail();
+        this.password = password;
+        this.username = kakaoUserInfo.getNickname();
+        this.gender = kakaoUserInfo.getGender();
+        this.role = role;
+    }
+
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 }
