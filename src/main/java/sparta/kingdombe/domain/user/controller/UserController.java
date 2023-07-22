@@ -29,12 +29,6 @@ public class UserController {
         return userDetails.getUser().getRole().toString();
     }
 
-//    @PostMapping("/job")
-//    public String test(@AuthenticationPrincipal UserDetailsImpl userDetails){
-//        System.out.println(userDetails.getUser().getEmail());
-//        return userDetails.getUser().getRole().toString();
-//    }
-
     @GetMapping("/homejobs")
     public String test2(){
         return "정상";
