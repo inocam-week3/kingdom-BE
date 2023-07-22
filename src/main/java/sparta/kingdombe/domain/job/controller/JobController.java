@@ -8,17 +8,30 @@ import sparta.kingdombe.global.responseDto.ApiResponse;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/job")
 @RequiredArgsConstructor
 public class JobController {
 
     private final JobService jobService;
 
-    @PostMapping("")
+    // 채용 공고 등록
+    @PostMapping
     public ApiResponse<?> createJob(@RequestBody JobRequestDto jobRequestDto){
        return jobService.createJob(jobRequestDto);
     }
 
-    @GetMapping()
+    // 채용 정보 조회
+    @GetMapping
+    public ApiResponse<?> getJob(){
+        return jobService.findAllJobInfo();
+    }
 
+//    // 채용 정보 상세조회
+//    @GetMapping("/{jobId}")
+//
+//    // 채용 정보 수정
+//    @PatchMapping("/{jobId}")
+//
+//    // 채용 정보 삭제
+//    @DeleteMapping("/{jobId}")
 }

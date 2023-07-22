@@ -8,7 +8,10 @@ import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
+import java.util.List;
+
 import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.JOB_CREATE_SUCCESS;
+import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 
 @Service
@@ -22,4 +25,8 @@ public class JobService {
         return okWithMessage(JOB_CREATE_SUCCESS);
     }
 
+    public ApiResponse<?> findAllJobInfo() {
+        List<JobInfo> jobInfoList = jobRepository.findAll();
+        return ok(jobInfoList);
+    }
 }
