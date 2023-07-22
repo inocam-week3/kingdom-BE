@@ -29,4 +29,9 @@ public class JobService {
         List<JobInfo> jobInfoList = jobRepository.findAll();
         return ok(jobInfoList);
     }
+
+    public ApiResponse<?> findJobInfoById(Long id) {
+        JobInfo jobInfo = jobRepository.findById(id).orElse(null);
+        return ok(jobInfo);
+    }
 }

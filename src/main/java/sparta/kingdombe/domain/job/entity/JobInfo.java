@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.global.utils.Timestamped;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -54,6 +55,7 @@ public class JobInfo extends Timestamped {
 
     @Column
     private String images;
+
 
     public JobInfo(JobRequestDto jobRequestDto) {
         this.title = jobRequestDto.getTitle();

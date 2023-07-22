@@ -26,8 +26,12 @@ public class JobController {
         return jobService.findAllJobInfo();
     }
 
-//    // 채용 정보 상세조회
-//    @GetMapping("/{jobId}")
+   // 채용 정보 상세조회
+    @GetMapping("/{jobId}")
+    public ApiResponse<?> getSelecteJob(@PathVariable("jobId") Long id){
+        return jobService.findJobInfoById(id);
+    }
+
 //
 //    // 채용 정보 수정
 //    @PatchMapping("/{jobId}")
