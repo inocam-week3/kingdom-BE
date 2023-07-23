@@ -21,9 +21,9 @@ public class StoryController {
         return storyService.findAllStory();
     }
 
-    @GetMapping("/{storyid}")
-    public ApiResponse<?> readOneStory(@PathVariable Long storyid) {
-        return storyService.readOneStory(storyid);
+    @GetMapping("/{storyId}")
+    public ApiResponse<?> readOneStory(@PathVariable Long storyId) {
+        return storyService.readOneStory(storyId);
     }
 
     @PostMapping("/newstory")
@@ -34,17 +34,17 @@ public class StoryController {
         return storyService.createStory(storyRequestDto, image, userDetailsImpl.getUser());
     }
 
-    @PatchMapping("/{storyid}")
-    public ApiResponse<?> modifyStory(@PathVariable Long storyid,
+    @PatchMapping("/{storyId}")
+    public ApiResponse<?> modifyStory(@PathVariable Long storyId,
                                       @RequestPart(value = "data") StoryRequestDto storyRequestDto,
                                       @RequestPart(value = "file", required = false) MultipartFile file,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return storyService.updateStory(storyid, storyRequestDto, file, userDetailsImpl.getUser());
+        return storyService.updateStory(storyId, storyRequestDto, file, userDetailsImpl.getUser());
     }
 
-    @DeleteMapping("/{storyid}")
-    public ApiResponse<?> deleteStory(@PathVariable Long storyid,
+    @DeleteMapping("/{storyId}")
+    public ApiResponse<?> deleteStory(@PathVariable Long storyId,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return storyService.deleteStory(storyid, userDetailsImpl.getUser());
+        return storyService.deleteStory(storyId, userDetailsImpl.getUser());
     }
 }

@@ -3,9 +3,13 @@ package sparta.kingdombe.domain.story.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sparta.kingdombe.domain.comment.entity.Comment;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.utils.Timestamped;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
@@ -30,6 +34,12 @@ public class Story extends Timestamped {
 
     private long liked;
 
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+    public void addComment(Comment comment) {
+        commentList.add(comment);
+        comment.initStory(this);
+    }
 
     public Story(StoryRequestDto storyRequestDto, String image, User user) {
         this.title = storyRequestDto.getTitle();
