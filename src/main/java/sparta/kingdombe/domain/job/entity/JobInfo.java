@@ -3,20 +3,20 @@ package sparta.kingdombe.domain.job.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
+import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.utils.Timestamped;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "jobinfo")
 public class JobInfo extends Timestamped {
 
@@ -34,15 +34,10 @@ public class JobInfo extends Timestamped {
     private String content;
 
     @Column(nullable = false)
-    private Date recruitmentPeriod;
+    private Date recruitmentStartPeriod;
     //모집기간 String 인가 Date 인가
-
     @Column(nullable = false)
-    private String managerName;
-
-    @Column(unique = true, nullable = false)
-    private String managerEmail;
-
+    private Date recruitmentEndPeriod;
     @Column(nullable = false)
     private Long recruitmentPersonNum;
 
@@ -50,23 +45,37 @@ public class JobInfo extends Timestamped {
     private Long salary;
 
     @Column
-    private String companyName;
-//추가사항
+    private String companyname;
 
     @Column
     private String images;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public JobInfo(JobRequestDto jobRequestDto) {
+
+    public JobInfo(JobRequestDto jobRequestDto, User user) {
         this.title = jobRequestDto.getTitle();
         this.location = jobRequestDto.getLocation();
         this.content = jobRequestDto.getContent();
-        this.recruitmentPeriod = jobRequestDto.getRecruitmentPeriod();
-        this.managerName = jobRequestDto.getManagerName();
-        this.managerEmail = jobRequestDto.getManagerEmail();
-        this.recruitmentPersonNum = jobRequestDto.getRecruitmentPersonNum();
-        this.salary=jobRequestDto.getSalary();
-        this.companyName = jobRequestDto.getCompanyName();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.salary = jobRequestDto.getSalary();
+        this.companyname = jobRequestDto.getCompanyname();
+        this.user = user;
+    }
+
+    public void update(JobRequestDto jobRequestDto) {
+        this.title = jobRequestDto.getTitle();
+        this.location = jobRequestDto.getLocation();
+        this.content = jobRequestDto.getContent();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.salary = jobRequestDto.getSalary();
+        this.companyname = jobRequestDto.getCompanyname();
     }
 }
 

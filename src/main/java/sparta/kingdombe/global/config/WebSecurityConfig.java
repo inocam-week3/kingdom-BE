@@ -87,11 +87,9 @@ public class WebSecurityConfig {
                                 .requestMatchers(GET, "/api/job/**","/api/resumes/**","/api/stories/**").permitAll()
 //                                .requestMatchers(GET, "/api/resumes/**").permitAll()
 //                                .requestMatchers(GET, "/api/stories/**").permitAll()
-                                .requestMatchers(POST, "/api/job/**").permitAll()
-                               // .requestMatchers(POST, "/api/job/**").hasRole("ENTERPRISE") 나중에는 이거로 수정해야해 !
+                                .requestMatchers(POST, "/api/job/**").hasRole("ENTERPRISE")
                                 .requestMatchers(PATCH, "/api/job/**").hasRole("ENTERPRISE")
-                               // .requestMatchers(DELETE, "/api/job/**").hasRole("ENTERPRISE") 나중에는 이거로 수정해야해 !
-                                .requestMatchers(DELETE, "/api/job/**").permitAll()
+                                .requestMatchers(DELETE, "/api/job/**").hasRole("ENTERPRISE")
                                 .requestMatchers(POST, "/api/resumes/**").hasRole("USER")
                                 .requestMatchers(PATCH, "/api/resumes/**").hasRole("USER")
                                 .requestMatchers(DELETE, "/api/resumes/**").hasRole("USER")

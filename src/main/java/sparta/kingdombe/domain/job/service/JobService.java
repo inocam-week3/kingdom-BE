@@ -6,14 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
+import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
+import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
+import sparta.kingdombe.global.stringCode.ErrorCodeEnum;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.JOB_CREATE_SUCCESS;
-import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.JOB_DELETE_SUCCESS;
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.*;
 import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 
@@ -22,24 +25,35 @@ import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 @RequiredArgsConstructor
 public class JobService {
     private final JobRepository jobRepository;
-    public ApiResponse<?> createJob(JobRequestDto jobRequestDto) {
-        JobInfo jobInfo = new JobInfo(jobRequestDto);
-        jobRepository.save(jobInfo);
-        return okWithMessage(JOB_CREATE_SUCCESS);
-    }
 
     public ApiResponse<?> findAllJobInfo() {
-        List<JobInfo> jobInfoList = jobRepository.findAll();
+        List<JobResponseDto> jobInfoList = jobRepository.findAll()
+                .stream()
+                .map(JobResponseDto::new)
+                .collect(Collectors.toList());
         return ok(jobInfoList);
     }
 
     public ApiResponse<?> findJobInfoById(Long id) {
-        JobInfo jobInfo = findJobInfo(id);
-        return ok(jobInfo);
+        return ok(new JobResponseDto(findJobInfo(id)));
     }
 
-    public ApiResponse<?> delete(Long id) {
+    public ApiResponse<?> createJob(JobRequestDto jobRequestDto, User user) {
+        JobInfo jobInfo = new JobInfo(jobRequestDto, user);
+        jobRepository.save(jobInfo);
+        return okWithMessage(JOB_CREATE_SUCCESS);
+    }
+
+    public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, User user) {
+        JobInfo jobinfo = findJobInfo(id);
+        checkUsername(id, user);
+        jobinfo.update(jobRequestDto);
+        return okWithMessage(JOB_MODIFY_SUCCESS);
+    }
+
+    public ApiResponse<?> delete(Long id, User user) {
         JobInfo jobInfo = findJobInfo(id);
+        checkUsername(id, user);
         jobRepository.delete(jobInfo);
         return okWithMessage(JOB_DELETE_SUCCESS);
     }
@@ -50,4 +64,9 @@ public class JobService {
         );
     }
 
+    private void checkUsername(Long id, User user) {
+       JobInfo jobInfo = findJobInfo(id);
+        if (!(jobInfo.getUser().getId().equals(user.getId())))
+            throw new IllegalArgumentException("채용공고는 작성자만 수정,삭제가 가능합니다");
+    }
 }

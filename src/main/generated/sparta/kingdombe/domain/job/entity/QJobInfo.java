@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,11 +18,13 @@ public class QJobInfo extends EntityPathBase<JobInfo> {
 
     private static final long serialVersionUID = -2004404664L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QJobInfo jobInfo = new QJobInfo("jobInfo");
 
     public final sparta.kingdombe.global.utils.QTimestamped _super = new sparta.kingdombe.global.utils.QTimestamped(this);
 
-    public final StringPath companyName = createString("companyName");
+    public final StringPath companyname = createString("companyname");
 
     public final StringPath content = createString("content");
 
@@ -34,28 +37,37 @@ public class QJobInfo extends EntityPathBase<JobInfo> {
 
     public final StringPath location = createString("location");
 
-    public final StringPath managerEmail = createString("managerEmail");
-
-    public final StringPath managerName = createString("managerName");
-
-    public final DateTimePath<java.util.Date> recruitmentPeriod = createDateTime("recruitmentPeriod", java.util.Date.class);
+    public final DateTimePath<java.util.Date> recruitmentEndPeriod = createDateTime("recruitmentEndPeriod", java.util.Date.class);
 
     public final NumberPath<Long> recruitmentPersonNum = createNumber("recruitmentPersonNum", Long.class);
+
+    public final DateTimePath<java.util.Date> recruitmentStartPeriod = createDateTime("recruitmentStartPeriod", java.util.Date.class);
 
     public final NumberPath<Long> salary = createNumber("salary", Long.class);
 
     public final StringPath title = createString("title");
 
+    public final sparta.kingdombe.domain.user.entity.QUser user;
+
     public QJobInfo(String variable) {
-        super(JobInfo.class, forVariable(variable));
+        this(JobInfo.class, forVariable(variable), INITS);
     }
 
     public QJobInfo(Path<? extends JobInfo> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QJobInfo(PathMetadata metadata) {
-        super(JobInfo.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QJobInfo(PathMetadata metadata, PathInits inits) {
+        this(JobInfo.class, metadata, inits);
+    }
+
+    public QJobInfo(Class<? extends JobInfo> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.user = inits.isInitialized("user") ? new sparta.kingdombe.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

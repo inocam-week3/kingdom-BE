@@ -1,22 +1,21 @@
 package sparta.kingdombe.domain.job.dto;
 
 import lombok.Getter;
-import sparta.kingdombe.domain.job.entity.JobInfo;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor
 public class JobRequestDto {
 
-    String companyName;
+    String companyname;
     String title;
     String content;
     String location;
     Long salary;
-    Date recruitmentPeriod;
-    Long recruitmentPersonNum;
-    String managerName;
-    String managerEmail;
-
+    Date recruitmentstartperiod;
+    Date recruitmentendperiod;
+    Long recruitmentpersonnum;
 
 }
