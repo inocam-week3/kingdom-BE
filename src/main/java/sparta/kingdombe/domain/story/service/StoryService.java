@@ -43,6 +43,7 @@ public class StoryService {
 
         String image = s3Service.upload(file);
         Story story = new Story(storyRequestDto, image, user);
+        StoryResponseDto storyResponseDto = new StoryResponseDto();
         storyRepository.save(story);
         return ok(new StoryResponseDto(story));
     }

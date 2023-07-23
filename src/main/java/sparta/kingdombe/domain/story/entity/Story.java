@@ -1,6 +1,8 @@
 package sparta.kingdombe.domain.story.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sparta.kingdombe.domain.comment.entity.Comment;
@@ -18,6 +20,8 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
+@Builder
+@AllArgsConstructor
 public class Story extends Timestamped {
 
     @Id @GeneratedValue(strategy = IDENTITY)
