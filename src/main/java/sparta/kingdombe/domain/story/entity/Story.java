@@ -1,0 +1,57 @@
+package sparta.kingdombe.domain.story.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.user.entity.User;
+import sparta.kingdombe.global.utils.Timestamped;
+
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
+import static lombok.AccessLevel.PROTECTED;
+
+@Getter
+@NoArgsConstructor(access = PROTECTED)
+@Entity
+public class Story extends Timestamped {
+
+    @Id @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "story_id")
+    private Long id;
+
+    private String title;
+    private String content;
+    private String image;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private long liked;
+
+
+    public Story(StoryRequestDto storyRequestDto, String image, User user) {
+        this.title = storyRequestDto.getTitle();
+        this.content = storyRequestDto.getContent();
+        this.image = image;
+        this.user = user;
+    }
+
+    public void update(StoryRequestDto storyRequestDto) {
+        this.title = storyRequestDto.getTitle();
+        this.content = storyRequestDto.getContent();
+    }
+
+    public void updateAll(StoryRequestDto storyRequestDto, String image) {
+        this.title = storyRequestDto.getTitle();
+        this.content = storyRequestDto.getContent();
+        this.image = image;
+    }
+
+    public void increaseLike() { this.liked++; }
+
+    public void decreaseLike() {
+        this.liked--;
+    }
+}
