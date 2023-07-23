@@ -23,7 +23,7 @@ public class StoryController {
 
     @GetMapping("/{storyId}")
     public ApiResponse<?> readOneStory(@PathVariable Long storyId) {
-        return storyService.readOneStory(storyId);
+        return storyService.findOnePost(storyId);
     }
 
     @PostMapping("/newstory")

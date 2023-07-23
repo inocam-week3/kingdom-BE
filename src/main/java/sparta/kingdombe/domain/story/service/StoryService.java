@@ -35,7 +35,7 @@ public class StoryService {
         return ok(result);
     }
 
-    public ApiResponse<?> readOneStory(Long storyId) {
+    public ApiResponse<?> findOnePost(Long storyId) {
         return ok(storyRepository.findById(storyId));
     }
 
@@ -82,8 +82,10 @@ public class StoryService {
     }
 
     private Story findStory(Long storyId) {
-        return storyRepository.findById(storyId).orElseThrow(() ->
+        Story story = storyRepository.findById(storyId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
+        story.increaseeViewCount();
+        return story;
     }
 
     private Story confirmStory(Long storyId, User user) {

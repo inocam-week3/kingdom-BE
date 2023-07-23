@@ -33,6 +33,7 @@ public class Story extends Timestamped {
     private User user;
 
     private long liked;
+    private long viewCount;
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
@@ -64,4 +65,6 @@ public class Story extends Timestamped {
     public void decreaseLike() {
         this.liked--;
     }
+
+    public void increaseeViewCount() {this.viewCount++;}
 }
