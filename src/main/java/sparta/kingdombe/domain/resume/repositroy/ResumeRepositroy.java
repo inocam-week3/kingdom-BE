@@ -13,7 +13,4 @@ public interface ResumeRepositroy extends JpaRepository<Resume, Long> {
 
     @Query("select r from Resume r where r.id= :resumeid")
     Optional<Resume> findDetailResume(@Param("resumeid") Long resumeid);
-
-
-    Optional<Resume> findAllB
 }
