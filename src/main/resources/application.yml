@@ -1,7 +1,7 @@
 cloud:
   aws:
     s3:
-      bucket: albaproject-bucket
+      bucket:
     stack.auto: false
     region.static: ap-northeast-2
     credentials:

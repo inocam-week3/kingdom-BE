@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor//(access = PROTECTED)
 @Getter
 public class Comment extends Timestamped {
 
@@ -31,9 +31,10 @@ public class Comment extends Timestamped {
     private User user;
 
 
-    public Comment(CommentRequestDto commentRequestDto, User user) {
+    public Comment(Story story, CommentRequestDto commentRequestDto, User user) {
         this.content = commentRequestDto.getContent();
         this.user = user;
+        this.story = story;
     }
 
     public void update(CommentRequestDto commentRequestDto) {

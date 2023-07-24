@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
@@ -38,6 +39,7 @@ public class StoryService {
                         .username(story.getUser().getUsername())
                         .createdAt(story.getCreatedAt())
                         .viewCount(story.getViewCount())
+                        .commentList(story.getCommentList().stream().map(comment -> new CommentResponseDto(comment)).toList())
                         .build())
                 .collect(Collectors.toList());
         ;

@@ -20,7 +20,7 @@ import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor//(access = PROTECTED)
 @Entity
 @AllArgsConstructor
 public class Story extends Timestamped {
