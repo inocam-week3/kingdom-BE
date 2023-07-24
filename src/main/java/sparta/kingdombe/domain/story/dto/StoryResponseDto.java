@@ -17,41 +17,62 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class StoryResponseDto {
 
-    private Long id;
-    private String title;
-    private String content;
-    private long liked;
-    private String username;
-    private LocalDateTime createdAt;
-    private List<CommentResponseDto> commentList;
-    private long viewCount;
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Create {
+        private Long id;
+        private String title;
+        private String content;
+        private long liked;
+        private String username;
+        private long viewCount;
+        private LocalDateTime createdAt;
+        private String image;
 
-    public StoryResponseDto (Story story) {
-        this.id = story.getId();
-        this.title = story.getTitle();
-        this.content = story.getContent();
-        this.liked = story.getLiked();
-        this.username = story.getUser().getUsername();
-        this.createdAt = story.getCreatedAt();
-        this.viewCount = story.getViewCount();
+        public Create(Story story) {
+            this.id = story.getId();
+            this.title = story.getTitle();
+            this.content = story.getContent();
+            this.liked = story.getLiked();
+            this.username = story.getUser().getUsername();
+            this.viewCount = story.getViewCount();
+            this.createdAt = story.getCreatedAt();
+            this.image = story.getImage();
+        }
     }
 
-    public StoryResponseDto Detail(Story story) {
-        StoryResponseDto storyResponseDto = new StoryResponseDto();
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Read {
+        private Long id;
+        private String title;
+        private String content;
+        private long liked;
+        private String username;
+        private long viewCount;
+        private LocalDateTime createdAt;
+        private List<CommentResponseDto> commentList;
+        private String image;
 
-        return storyResponseDto.builder()
-                .id(story.getId())
-                .title(story.getTitle())
-                .content(story.getContent())
-                .liked(story.getLiked())
-                .username(story.getUser().getUsername())
-                .createdAt(story.getCreatedAt())
-                .viewCount(story.getViewCount())
-                .commentList(story.getCommentList()
-                        .stream()
-                        .map(CommentResponseDto::new)
-                        .collect(Collectors.toList()))
-                .build();
+        public Read(Story story) {
+            this.id = story.getId();
+            this.title = story.getTitle();
+            this.content = story.getContent();
+            this.liked = story.getLiked();
+            this.username = story.getUser().getUsername();
+            this.viewCount = story.getViewCount();
+            this.createdAt = story.getCreatedAt();
+            this.image = story.getImage();
+            this.commentList = story.getCommentList()
+                    .stream()
+                    .map(CommentResponseDto::new)
+                    .collect(Collectors.toList());
+        }
     }
+
+
+
 }
 
