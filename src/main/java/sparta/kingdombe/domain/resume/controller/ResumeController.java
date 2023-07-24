@@ -21,26 +21,32 @@ public class ResumeController {
     }
 
     // 상세 조회
-    @GetMapping("/{resumeid}")
-    public ApiResponse<?> getSelectedResume(@PathVariable Long resumeid) {
-        return resumeService.getSelectedResume(resumeid);
+    @GetMapping("/{resumeId}")
+    public ApiResponse<?> getSelectedResume(@PathVariable Long resumeId) {
+        return resumeService.getSelectedResume(resumeId);
     }
 
-    // 생성
-    @PostMapping
-    public ApiResponse<?> createResume(@RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl UserDetails) {
-        return resumeService.createResume(resumeRequestDto, UserDetails.getUser());
+    // 작성 페이지 조회
+    @GetMapping("/write")
+    public ApiResponse<?> getReadResume(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return resumeService.getReadResume(userDetails.getUser());
     }
 
-    // 수정
-    @PatchMapping("/{resumeid}")
-    public ApiResponse<?> updateResume(@PathVariable Long resumeid, @RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl UserDetails) {
-        return resumeService.updateResume(resumeid, resumeRequestDto, UserDetails.getUser());
+    // 인재 정보 작성
+    @PostMapping("/write")
+    public ApiResponse<?> createResume(@RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return resumeService.createResume(resumeRequestDto, userDetails.getUser());
     }
 
-    // 삭제
-    @DeleteMapping("/{resumeid}")
-    public ApiResponse<?> deleteResume(@PathVariable Long resumeid, @AuthenticationPrincipal UserDetailsImpl UserDetails) {
-        return resumeService.deleteResume(resumeid, UserDetails.getUser());
+    // 인재 정보 수정
+    @PatchMapping("/{resumeId}")
+    public ApiResponse<?> updateResume(@PathVariable Long resumeId, @RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return resumeService.updateResume(resumeId, resumeRequestDto, userDetails.getUser());
+    }
+
+    // 인재 정보 삭제
+    @DeleteMapping("/{resumeId}")
+    public ApiResponse<?> deleteResume(@PathVariable Long resumeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return resumeService.deleteResume(resumeId, userDetails.getUser());
     }
 }
