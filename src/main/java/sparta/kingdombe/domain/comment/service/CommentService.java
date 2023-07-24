@@ -27,7 +27,6 @@ public class CommentService {
     public ApiResponse<?> createComment(Long storyId, CommentRequestDto commentRequestDto, User user) {
         Story story = findStory(storyId);
         Comment comment = new Comment(story, commentRequestDto, user);
-  //      findStory(storyId).addComment(comment);
         commentRepository.save(comment);
         return ok(new CommentResponseDto(comment));
     }
