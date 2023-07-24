@@ -24,7 +24,7 @@ public class Like {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "story_id")
     @OnDelete(action = CASCADE)
     private Story story;
 

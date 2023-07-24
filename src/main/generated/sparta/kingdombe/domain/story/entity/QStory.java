@@ -41,6 +41,8 @@ public class QStory extends EntityPathBase<Story> {
 
     public final sparta.kingdombe.domain.user.entity.QUser user;
 
+    public final NumberPath<Long> viewCount = createNumber("viewCount", Long.class);
+
     public QStory(String variable) {
         this(Story.class, forVariable(variable), INITS);
     }
