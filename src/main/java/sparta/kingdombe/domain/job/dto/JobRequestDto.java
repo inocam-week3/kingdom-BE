@@ -2,6 +2,7 @@ package sparta.kingdombe.domain.job.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sparta.kingdombe.domain.user.entity.User;
 
 import java.util.Date;
 
@@ -17,5 +18,6 @@ public class JobRequestDto {
     Date recruitmentstartperiod;
     Date recruitmentendperiod;
     Long recruitmentpersonnum;
+
 
 }
