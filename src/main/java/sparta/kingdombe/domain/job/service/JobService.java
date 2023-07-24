@@ -1,6 +1,7 @@
 package sparta.kingdombe.domain.job.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,6 @@ import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
-import sparta.kingdombe.global.stringCode.ErrorCodeEnum;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +23,7 @@ import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class JobService {
     private final JobRepository jobRepository;
 
@@ -43,6 +44,7 @@ public class JobService {
         jobRepository.save(jobInfo);
         return okWithMessage(JOB_CREATE_SUCCESS);
     }
+
 
     public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, User user) {
         JobInfo jobinfo = findJobInfo(id);

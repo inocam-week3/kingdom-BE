@@ -1,6 +1,7 @@
 package sparta.kingdombe.domain.job.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
@@ -11,6 +12,7 @@ import sparta.kingdombe.global.security.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/job")
 @RequiredArgsConstructor
+@Slf4j
 public class JobController {
 
     private final JobService jobService;
@@ -30,13 +32,13 @@ public class JobController {
 
     // 채용 정보 상세조회
     @GetMapping("/{jobid}")
-    public ApiResponse<?> getSelectJob(@PathVariable("jobId") Long id) {
+    public ApiResponse<?> getSelectJob(@PathVariable("jobid") Long id) {
         return jobService.findJobInfoById(id);
     }
 
     // 채용 정보 수정
     @PatchMapping("/{jobid}")
-    public ApiResponse<?> updateJob(@PathVariable("jobId") Long id,
+    public ApiResponse<?> updateJob(@PathVariable("jobid") Long id,
                                     @RequestBody JobRequestDto jobRequestDto,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return jobService.update(id, jobRequestDto, userDetails.getUser());
@@ -44,7 +46,7 @@ public class JobController {
 
     // 채용 정보 삭제
     @DeleteMapping("/{jobid}")
-    public ApiResponse<?> deleteJob(@PathVariable("jobId") Long id,
+    public ApiResponse<?> deleteJob(@PathVariable("jobid") Long id,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return jobService.delete(id, userDetails.getUser());
     }
