@@ -1,0 +1,9 @@
+cloud:
+  aws:
+    s3:
+      bucket: albaproject-bucket
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIA5ULWZN5ACQJHN2NK
+      secretKey: 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
