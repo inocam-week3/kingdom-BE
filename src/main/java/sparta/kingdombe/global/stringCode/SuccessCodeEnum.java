@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public enum SuccessCodeEnum {
 
-    // 로그인 회원가입 메시지
     USER_SIGNUP_SUCCESS("회원가입 성공"),
     USER_LOGIN_SUCCESS("로그인 성공"),
-
-    // 글 메시지
+    JOB_CREATE_SUCCESS("채용정보 추가 성공"),
+    JOB_DELETE_SUCCESS("채용정보 삭제 성공"),
+    JOB_MODIFY_SUCCESS("채용정보 수정 성공"),
     POST_CREATE_SUCCESS("게시글 작성 성공"),
     POST_UPDATE_SUCCESS("게시글 수정 성공"),
     POST_DELETE_SUCCESS("게시글 삭제 성공");
