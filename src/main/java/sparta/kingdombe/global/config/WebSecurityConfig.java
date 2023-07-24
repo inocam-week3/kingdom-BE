@@ -60,7 +60,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 배포주소 넣기 "http://inocam-week6.s3-website.ap-northeast-2.amazonaws.com",
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://inocam-week6.s3-website.ap-northeast-2.amazonaws.com"));
         config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT","OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.addExposedHeader("*");

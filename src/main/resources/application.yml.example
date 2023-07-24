@@ -1,0 +1,15 @@
+cloud:
+  aws:
+    s3:
+      bucket:
+    stack.auto:
+    region.static:
+    credentials:
+      accessKey:
+      secretKey:
+
+spring:
+  servlet:
+    multipart:
+      max-file-size:
+      max-request-size:

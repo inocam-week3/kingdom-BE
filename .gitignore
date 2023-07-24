@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+application.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -35,3 +37,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### .gitignore ###
+/src/main/generated/
+
+/src/main/resources/application.yml
+/src/main/resources/application.properties
+
