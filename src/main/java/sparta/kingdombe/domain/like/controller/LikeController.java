@@ -21,7 +21,6 @@ public class LikeController {
     @PostMapping("/{storyId}/like")
     public ApiResponse<?> updateLike(@PathVariable Long storyId,
                                      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        System.out.println("스토리 번호 -> " + storyId + "  유저번호는 --> " + userDetailsImpl.getUsername());
         return likeService.updateLike(storyId, userDetailsImpl.getUser());
     }
 }

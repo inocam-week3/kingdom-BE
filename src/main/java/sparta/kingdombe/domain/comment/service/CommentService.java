@@ -34,7 +34,7 @@ public class CommentService {
     public ApiResponse<?> updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
         Comment comment = confirmComment(commentId, user);
         comment.update(commentRequestDto);
-        return ok(comment);
+        return ok(new CommentResponseDto(comment));
     }
 
     public ApiResponse<?> deleteComment(Long commentId, User user) {
