@@ -21,9 +21,13 @@ import sparta.kingdombe.domain.user.entity.UserGenderEnum;
 import sparta.kingdombe.domain.user.entity.UserRoleEnum;
 import sparta.kingdombe.domain.user.repository.UserRepository;
 import sparta.kingdombe.global.jwt.JwtProvider;
+import sparta.kingdombe.global.responseDto.ApiResponse;
 
 import java.net.URI;
 import java.util.UUID;
+
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.USER_LOGIN_SUCCESS;
+import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 
 @Slf4j(topic = "KAKAO Login")
 @Service
@@ -35,20 +39,23 @@ public class KakaoService {
     private final RestTemplate restTemplate;
     private final JwtProvider jwtProvider;
 
-    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public ApiResponse<?> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
-        String accessToken = getToken(code);
+        String kakaoAccessToken = getToken(code);
 
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(kakaoAccessToken);
 
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 토큰 반환
-        String createToken = jwtProvider.createToken(kakaoUser.getEmail(), kakaoUser.getRole());
-        jwtProvider.addJwtHeader(createToken, response);
-        return "로그인 성공";
+        String accessToken = jwtProvider.createAccessToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername());
+        String refreshToken = jwtProvider.createRefreshToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername());
+        jwtProvider.addAccessJwtHeader(accessToken, response);
+        jwtProvider.addRefreshJwtHeader(refreshToken, response);
+
+        return okWithMessage(USER_LOGIN_SUCCESS);
     }
 
     private String getToken(String code) throws JsonProcessingException {
@@ -127,8 +134,8 @@ public class KakaoService {
     }
 
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
-        // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
+        // DB 에 중복된 Kakao Id 가 있는지 확인 // 이미 가입했는지 - 처음인지
+        Long kakaoId = kakaoUserInfo.getId(); // @kakao.com // naver.com
         User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
@@ -137,7 +144,7 @@ public class KakaoService {
             String kakaoEmail = kakaoUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
             if (sameEmailUser != null) {
-                kakaoUser = sameEmailUser;
+                kakaoUser = sameEmailUser; // kakaoId || default
                 // 기존 회원정보에 카카오 Id 추가
                 kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
             } else {
