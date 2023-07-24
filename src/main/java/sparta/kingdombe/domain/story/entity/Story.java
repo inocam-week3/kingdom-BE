@@ -22,7 +22,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
-@Builder
 @AllArgsConstructor
 public class Story extends Timestamped {
 

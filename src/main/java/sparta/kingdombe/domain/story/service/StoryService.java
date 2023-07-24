@@ -30,7 +30,7 @@ public class StoryService {
 
         List<StoryResponseDto> result = storyRepository.findAll()
                 .stream()
-                .map(story ->StoryResponseDto.builder()
+                .map(story -> StoryResponseDto.builder()
                         .id(story.getId())
                         .title(story.getTitle())
                         .content(story.getContent())
@@ -39,7 +39,8 @@ public class StoryService {
                         .createdAt(story.getCreatedAt())
                         .viewCount(story.getViewCount())
                         .build())
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
+        ;
         return ok(result);
     }
 
@@ -80,8 +81,8 @@ public class StoryService {
             if (StringUtils.hasText(existingImageUrl)) {
                 s3Service.delete(existingImageUrl);
             }
+            story.update(storyRequestDto);
         }
-        story.update(storyRequestDto);
     }
 
     private void deleteImage(Story story) {
@@ -105,7 +106,6 @@ public class StoryService {
         }
         return story;
     }
-
 
 
 }

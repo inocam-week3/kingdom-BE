@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.like.entity.Like;
 import sparta.kingdombe.domain.like.repository.LikeRepository;
+import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
@@ -27,14 +28,16 @@ public class LikeService {
         if (!isLikedStory(story, user)) {
             createLike(story, user);
             story.increaseLike();
-            return ok(story);
+            System.out.println("좋아요 버튼 성공 + 1 총 좋아요 수 -->" + story.getLiked());
+            return ok(new StoryResponseDto(story));
             //           return new ApiResponse<>(true, story, null);
         }
 
         removeLike(story, user);
         story.decreaseLike();
         //return new ApiResponse<>(true, story, null);
-        return ok(story);
+        System.out.println("좋아요 버튼 취소 - 1 총 좋아요 수 -->" + story.getLiked());
+        return ok(new StoryResponseDto(story));
     }
 
     private boolean isLikedStory(Story story, User user) {
