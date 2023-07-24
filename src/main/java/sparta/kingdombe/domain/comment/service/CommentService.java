@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.comment.dto.CommentRequestDto;
+import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.comment.entity.Comment;
 import sparta.kingdombe.domain.comment.repository.CommentRepository;
+import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
@@ -23,10 +25,11 @@ public class CommentService {
 
 
     public ApiResponse<?> createComment(Long storyId, CommentRequestDto commentRequestDto, User user) {
-        Comment comment = new Comment(commentRequestDto, user);
-        findStory(storyId).addComment(comment);
+        Story story = findStory(storyId);
+        Comment comment = new Comment(story, commentRequestDto, user);
+  //      findStory(storyId).addComment(comment);
         commentRepository.save(comment);
-        return ok(comment);
+        return ok(new CommentResponseDto(comment));
     }
 
     public ApiResponse<?> updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
