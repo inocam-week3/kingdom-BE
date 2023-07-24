@@ -28,15 +28,11 @@ public class LikeService {
         if (!isLikedStory(story, user)) {
             createLike(story, user);
             story.increaseLike();
-            System.out.println("좋아요 버튼 성공 + 1 총 좋아요 수 -->" + story.getLiked());
             return ok(new StoryResponseDto(story));
-            //           return new ApiResponse<>(true, story, null);
         }
 
         removeLike(story, user);
         story.decreaseLike();
-        //return new ApiResponse<>(true, story, null);
-        System.out.println("좋아요 버튼 취소 - 1 총 좋아요 수 -->" + story.getLiked());
         return ok(new StoryResponseDto(story));
     }
 
