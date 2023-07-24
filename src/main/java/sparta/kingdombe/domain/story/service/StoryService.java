@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
@@ -14,8 +15,6 @@ import sparta.kingdombe.global.responseDto.ApiResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static sparta.kingdombe.domain.story.dto.StoryResponseDto.Create;
-import static sparta.kingdombe.domain.story.dto.StoryResponseDto.Read;
 import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 
 @Service
@@ -28,29 +27,40 @@ public class StoryService {
 
 
     public ApiResponse<?> findAllStory() {
-        List<Create> result = storyRepository.findAll()
+
+        List<StoryResponseDto> result = storyRepository.findAll()
                 .stream()
-                .map(Create::new)
-                .collect(Collectors.toList());
+                .map(story ->StoryResponseDto.builder()
+                        .id(story.getId())
+                        .title(story.getTitle())
+                        .content(story.getContent())
+                        .liked(story.getLiked())
+                        .username(story.getUser().getUsername())
+                        .createdAt(story.getCreatedAt())
+                        .viewCount(story.getViewCount())
+                        .build())
+                .collect(Collectors.toList());;
         return ok(result);
     }
 
     public ApiResponse<?> findOnePost(Long storyId) {
         Story story = findStory(storyId);
-        return ok(new Read(story));
+        StoryResponseDto storyResponseDto = new StoryResponseDto(story);
+        return ok(storyResponseDto);
     }
 
     public ApiResponse<?> createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {
         String image = s3Service.upload(file);
         Story story = new Story(storyRequestDto, image, user);
         storyRepository.save(story);
-        return ok(new Create(story));
+        return ok(new StoryResponseDto(story));
     }
 
     public ApiResponse<?> updateStory(Long storyId, StoryRequestDto storyRequestDto, MultipartFile file, User user) {
         Story story = confirmStory(storyId, user);
         updateStoryDetail(storyRequestDto, file, story);
-        return ok(new Read(story));
+        StoryResponseDto storyResponseDto = new StoryResponseDto(story);
+        return ok(storyResponseDto);
     }
 
     public ApiResponse<?> deleteStory(Long storyId, User user) {
@@ -84,7 +94,7 @@ public class StoryService {
     private Story findStory(Long storyId) {
         Story story = storyRepository.findById(storyId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
-        story.increaseeViewCount();
+        story.increaseViewCount();
         return story;
     }
 
@@ -95,6 +105,7 @@ public class StoryService {
         }
         return story;
     }
+
 
 
 }

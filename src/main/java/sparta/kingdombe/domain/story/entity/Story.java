@@ -26,7 +26,8 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class Story extends Timestamped {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "story_id")
     private Long id;
 
@@ -68,11 +69,15 @@ public class Story extends Timestamped {
         this.image = image;
     }
 
-    public void increaseLike() { this.liked++; }
+    public void increaseLike() {
+        this.liked++;
+    }
 
     public void decreaseLike() {
         this.liked--;
     }
 
-    public void increaseeViewCount() {this.viewCount++;}
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }
