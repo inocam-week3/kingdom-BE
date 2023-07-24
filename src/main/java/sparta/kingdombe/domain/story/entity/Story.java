@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import sparta.kingdombe.domain.comment.entity.Comment;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.user.entity.User;
@@ -40,7 +42,9 @@ public class Story extends Timestamped {
     private long viewCount;
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Comment> commentList = new ArrayList<>();
+
     public void addComment(Comment comment) {
         commentList.add(comment);
         comment.initStory(this);

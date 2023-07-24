@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
-import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
@@ -15,7 +14,9 @@ import sparta.kingdombe.global.responseDto.ApiResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static sparta.kingdombe.global.utils.ResponseUtils.*;
+import static sparta.kingdombe.domain.story.dto.StoryResponseDto.Create;
+import static sparta.kingdombe.domain.story.dto.StoryResponseDto.Read;
+import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 
 @Service
 @RequiredArgsConstructor
@@ -27,31 +28,29 @@ public class StoryService {
 
 
     public ApiResponse<?> findAllStory() {
-
-        List<StoryResponseDto> result = storyRepository.findAll()
+        List<Create> result = storyRepository.findAll()
                 .stream()
-                .map(StoryResponseDto::new)
+                .map(Create::new)
                 .collect(Collectors.toList());
         return ok(result);
     }
 
     public ApiResponse<?> findOnePost(Long storyId) {
-        return ok(storyRepository.findById(storyId));
+        Story story = findStory(storyId);
+        return ok(new Read(story));
     }
 
     public ApiResponse<?> createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {
-
         String image = s3Service.upload(file);
         Story story = new Story(storyRequestDto, image, user);
-        StoryResponseDto storyResponseDto = new StoryResponseDto();
         storyRepository.save(story);
-        return ok(new StoryResponseDto(story));
+        return ok(new Create(story));
     }
 
     public ApiResponse<?> updateStory(Long storyId, StoryRequestDto storyRequestDto, MultipartFile file, User user) {
         Story story = confirmStory(storyId, user);
         updateStoryDetail(storyRequestDto, file, story);
-        return ok(new StoryResponseDto(story));
+        return ok(new Read(story));
     }
 
     public ApiResponse<?> deleteStory(Long storyId, User user) {
