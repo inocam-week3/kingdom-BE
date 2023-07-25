@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import sparta.kingdombe.domain.story.dto.QStoryResponseDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
-import sparta.kingdombe.domain.story.entity.Story;
+
 
 import java.util.List;
 
