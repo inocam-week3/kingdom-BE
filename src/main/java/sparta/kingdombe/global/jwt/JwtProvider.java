@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import sparta.kingdombe.domain.user.entity.UserGenderEnum;
 import sparta.kingdombe.domain.user.entity.UserRoleEnum;
 
 import java.io.UnsupportedEncodingException;
@@ -29,6 +30,7 @@ public class JwtProvider {
     public static final String REFRESH_HEADER = "refreshtoken";
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String NICKNAME_KEY = "nickname";
+    public static final String GENDER_KEY = "gender";
     private static final String BEARER_PREFIX = "Bearer ";
     public final long ACCESS_TOKEN_TIME = 30 * 60 * 1000L; // 30분
     public final long REFRESH_TOKEN_TIME = 3 * 24 * 60 * 60 * 1000L; // 3일
@@ -75,13 +77,14 @@ public class JwtProvider {
     }
 
     // 토큰 생성
-    public String createToken(String email, UserRoleEnum role, Long tokenTime, String name) {
+    public String createToken(String email, UserRoleEnum role, Long tokenTime, String name, UserGenderEnum gender) {
         Date date = new Date();
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(email)
                         .claim(AUTHORIZATION_KEY, role)
                         .claim(NICKNAME_KEY, name)
+                        .claim(GENDER_KEY, gender)
                         .setExpiration(new Date(date.getTime() + tokenTime))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
@@ -109,12 +112,12 @@ public class JwtProvider {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String createAccessToken(String email, UserRoleEnum role, String name) {
-        return this.createToken(email, role, ACCESS_TOKEN_TIME, name);
+    public String createAccessToken(String email, UserRoleEnum role, String name, UserGenderEnum gender) {
+        return this.createToken(email, role, ACCESS_TOKEN_TIME, name, gender);
     }
 
-    public String createRefreshToken(String email, UserRoleEnum role, String name) {
-        return this.createToken(email, role, REFRESH_TOKEN_TIME, name);
+    public String createRefreshToken(String email, UserRoleEnum role, String name, UserGenderEnum gender) {
+        return this.createToken(email, role, REFRESH_TOKEN_TIME, name, gender);
     }
 
     public void addAccessJwtHeader(String accessToken, HttpServletResponse response) {
@@ -137,7 +140,8 @@ public class JwtProvider {
         String email = refreshInfo.getSubject();
         UserRoleEnum role = UserRoleEnum.valueOf(refreshInfo.get(AUTHORIZATION_KEY, String.class));
         String name = refreshInfo.get(NICKNAME_KEY, String.class);
+        UserGenderEnum gender = UserGenderEnum.valueOf(refreshInfo.get(GENDER_KEY, String.class));
 
-        return this.createAccessToken(email, role, name);
+        return this.createAccessToken(email, role, name, gender);
     }
 }

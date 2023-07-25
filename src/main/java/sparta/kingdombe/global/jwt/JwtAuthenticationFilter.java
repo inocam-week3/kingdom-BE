@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import sparta.kingdombe.domain.user.dto.LoginRequestDto;
+import sparta.kingdombe.domain.user.entity.UserGenderEnum;
 import sparta.kingdombe.domain.user.entity.UserRoleEnum;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
@@ -59,9 +60,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
         String name = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+        UserGenderEnum gender = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getGender();
 
-        String accessToken = jwtProvider.createAccessToken(email, role, name); // access token 생성
-        String refreshToken = jwtProvider.createRefreshToken(email, role, name); // refresh token 생성
+        String accessToken = jwtProvider.createAccessToken(email, role, name, gender); // access token 생성
+        String refreshToken = jwtProvider.createRefreshToken(email, role, name, gender); // refresh token 생성
 
         jwtProvider.addAccessJwtHeader(accessToken, response);
         jwtProvider.addRefreshJwtHeader(refreshToken, response);
