@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.service.StoryService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
@@ -17,8 +18,9 @@ public class StoryController {
     private final StoryService storyService;
 
     @GetMapping
-    public ApiResponse<?> readAllStory() {
-        return storyService.findAllStory();
+    public ApiResponse<?> readAllStory(@RequestParam("page") int page,
+                                       @RequestParam("size") int size) {
+        return storyService.findAllStory(page - 1, size); // ?page=1&size=10
     }
 
     @GetMapping("/{storyId}")

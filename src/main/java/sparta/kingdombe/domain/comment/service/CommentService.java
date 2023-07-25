@@ -50,7 +50,7 @@ public class CommentService {
 
     private Comment confirmComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다"));
-        if (!(comment.getUser().getId() == user.getId())) {
+        if (!(comment.getUser().getId().equals(user.getId()))) {
             throw new IllegalArgumentException("댓글 작성자만 수정,삭제가 가능합니다");
         }
         return comment;

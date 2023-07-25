@@ -79,4 +79,8 @@ public class Story extends Timestamped {
     public void increaseViewCount() {
         this.viewCount++;
     }
+
+    public void updateImage(String imageUrl) {
+        this.image = imageUrl;
+    }
 }
