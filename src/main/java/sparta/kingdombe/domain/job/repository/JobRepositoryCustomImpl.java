@@ -19,6 +19,7 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
     public Page<JobResponseDto> searchJob(JobSearchCondition condition, Pageable pageable) {
 
         query
-                .select(jobInfo)
+                .selectFrom(jobInfo)
+                .
     }
 }
