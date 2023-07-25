@@ -7,7 +7,7 @@ import sparta.kingdombe.domain.resume.dto.ResumeReadResponseDto;
 import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
 import sparta.kingdombe.domain.resume.dto.ResumeResponseDto;
 import sparta.kingdombe.domain.resume.entity.Resume;
-import sparta.kingdombe.domain.resume.repositroy.ResumeRepositroy;
+import sparta.kingdombe.domain.resume.repository.ResumeRepository;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.exception.InvalidConditionException;
 import sparta.kingdombe.global.responseDto.ApiResponse;
@@ -24,12 +24,12 @@ import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 @Transactional
 @RequiredArgsConstructor
 public class ResumeService {
-    private final ResumeRepositroy resumeRepositroy;
+    private final ResumeRepository resumeRepository;
 
     // 전제 조회
     @Transactional(readOnly = true)
     public ApiResponse<?> findAllResume() {
-        List<ResumeResponseDto> resumeList = resumeRepositroy.findAll()
+        List<ResumeResponseDto> resumeList = resumeRepository.findAll()
                 .stream()
                 .map(ResumeResponseDto::new)
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class ResumeService {
     // 상세 조회
     @Transactional(readOnly = true)
     public ApiResponse<?> getSelectedResume(Long resumeId) {
-        Resume resume = resumeRepositroy
+        Resume resume = resumeRepository
                 .findDetailResume(resumeId)
                 .orElseThrow(() ->
                         new InvalidConditionException(ErrorCodeEnum.POST_NOT_EXIST));
@@ -54,7 +54,7 @@ public class ResumeService {
     // 인재 정보 생성
     public ApiResponse<?> createResume(ResumeRequestDto resumeRequestDto, User user) {
         Resume resume = new Resume(resumeRequestDto, user);
-        resumeRepositroy.save(resume);
+        resumeRepository.save(resume);
         return ok(new ResumeResponseDto(resume));
     }
 
@@ -70,12 +70,12 @@ public class ResumeService {
     public ApiResponse<?> deleteResume(Long resumeId, User user) {
         Resume resume = findResume(resumeId);
         checkUsername(resumeId, user);
-        resumeRepositroy.delete(resume);
+        resumeRepository.delete(resume);
         return ResponseUtils.okWithMessage(SuccessCodeEnum.POST_DELETE_SUCCESS);
     }
 
     private Resume findResume(Long resumeId) {
-        return resumeRepositroy.findById(resumeId).orElseThrow(() ->
+        return resumeRepository.findById(resumeId).orElseThrow(() ->
                 new InvalidConditionException(ErrorCodeEnum.POST_NOT_EXIST));
     }
 
