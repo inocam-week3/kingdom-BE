@@ -93,6 +93,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(POST, "/api/resumes/**").hasRole("USER")
                                 .requestMatchers(PATCH, "/api/resumes/**").hasRole("USER")
                                 .requestMatchers(DELETE, "/api/resumes/**").hasRole("USER")
+                                .requestMatchers("/favicon.ico").permitAll()
                                 .anyRequest().authenticated()) // 그 외 모든 요청 인증처리
                 .addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
