@@ -33,9 +33,9 @@ public class QJobInfo extends EntityPathBase<JobInfo> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath images = createString("images");
-
     public final StringPath location = createString("location");
+
+    public final StringPath logoImage = createString("logoImage");
 
     public final DateTimePath<java.util.Date> recruitmentEndPeriod = createDateTime("recruitmentEndPeriod", java.util.Date.class);
 
@@ -48,6 +48,8 @@ public class QJobInfo extends EntityPathBase<JobInfo> {
     public final StringPath title = createString("title");
 
     public final sparta.kingdombe.domain.user.entity.QUser user;
+
+    public final StringPath workInfraImage = createString("workInfraImage");
 
     public QJobInfo(String variable) {
         this(JobInfo.class, forVariable(variable), INITS);
