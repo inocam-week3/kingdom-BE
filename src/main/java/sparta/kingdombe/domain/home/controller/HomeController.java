@@ -29,7 +29,7 @@ public class HomeController {
         return new ApiResponse<>(false, null, errorResponse);
     }
 
-    @GetMapping("/homestory")
+    @GetMapping("/homestories")
     public ApiResponse<?> getStory() throws IOException {
         return homeService.getStory();
     }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.home.dto.HomeJobResponseDto;
 import sparta.kingdombe.domain.home.dto.HomeStoryResponseDto;
-import sparta.kingdombe.domain.home.entity.HomeStory;
-import sparta.kingdombe.domain.home.repository.HomeRepository;
-import sparta.kingdombe.domain.home.repository.HomeStoryRepository;
+import sparta.kingdombe.domain.job.repository.JobRepository;
+import sparta.kingdombe.domain.story.entity.Story;
+import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
 import java.io.IOException;
@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeService {
 
-    private final HomeRepository homeRepository;
-    private final HomeStoryRepository homeStoryRepository;
+    private final JobRepository jobRepository;
+    private final StoryRepository storyRepository;
 
     public ApiResponse<?> getHome() throws IOException {
-        List<HomeJobResponseDto> result = homeRepository.findAll()
+        List<HomeJobResponseDto> result = jobRepository.findAll()
                 .stream()
                 .map(HomeJobResponseDto::new)
                 .collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class HomeService {
 
     public ApiResponse<?> getStory() throws IOException {
         Pageable pageable = PageRequest.of(0,10);
-        Page<HomeStory> homeList = homeStoryRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Story> homeList = storyRepository.findAllByOrderByCreatedAtDesc(pageable);
 
 
         List<HomeStoryResponseDto> result = homeList.getContent()
