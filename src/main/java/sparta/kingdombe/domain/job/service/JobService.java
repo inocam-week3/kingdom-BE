@@ -5,11 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import sparta.kingdombe.domain.job.dto.JobAllResponseDto;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
+import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.story.entity.Story;
+import sparta.kingdombe.domain.story.service.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
@@ -26,11 +32,12 @@ import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 @Slf4j
 public class JobService {
     private final JobRepository jobRepository;
+    private final S3Service s3Service;
 
     public ApiResponse<?> findAllJobInfo() {
-        List<JobResponseDto> jobInfoList = jobRepository.findAll()
+        List<JobAllResponseDto> jobInfoList = jobRepository.findAll()
                 .stream()
-                .map(JobResponseDto::new)
+                .map(JobAllResponseDto::new)
                 .collect(Collectors.toList());
         return ok(jobInfoList);
     }
@@ -39,25 +46,57 @@ public class JobService {
         return ok(new JobResponseDto(findJobInfo(id)));
     }
 
-    public ApiResponse<?> createJob(JobRequestDto jobRequestDto, User user) {
-        JobInfo jobInfo = new JobInfo(jobRequestDto, user);
+    public ApiResponse<?> createJob(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
+        String image = s3Service.upload(multipartFile);
+        String image2 = s3Service.upload(multipartFile2);
+        JobInfo jobInfo = new JobInfo(jobRequestDto, image, image2, user);
         jobRepository.save(jobInfo);
         return okWithMessage(JOB_CREATE_SUCCESS);
     }
 
 
-    public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, User user) {
+    public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
         JobInfo jobinfo = findJobInfo(id);
         checkUsername(id, user);
-        jobinfo.update(jobRequestDto);
+        updateStoryDetail(jobRequestDto, multipartFile, multipartFile2, jobinfo);
         return okWithMessage(JOB_MODIFY_SUCCESS);
     }
 
     public ApiResponse<?> delete(Long id, User user) {
         JobInfo jobInfo = findJobInfo(id);
         checkUsername(id, user);
+        deleteImage(jobInfo);
         jobRepository.delete(jobInfo);
         return okWithMessage(JOB_DELETE_SUCCESS);
+    }
+
+    private void deleteImage(JobInfo jobInfo) {
+        String logoImageUrl = jobInfo.getLogoImage();
+        String workInfraImageUrl = jobInfo.getWorkInfraImage();
+        if (StringUtils.hasText(logoImageUrl)) {
+            s3Service.delete(logoImageUrl);
+        }
+        if (StringUtils.hasText(workInfraImageUrl)) {
+            s3Service.delete(workInfraImageUrl);
+        }
+    }
+
+    private void updateStoryDetail(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, JobInfo jobInfo) {
+        if (multipartFile != null && !multipartFile.isEmpty() || multipartFile2 != null && !multipartFile2.isEmpty()) {
+            String logoImageUrl = jobInfo.getLogoImage();
+            String workInfraImageUrl = jobInfo.getWorkInfraImage();
+            String newlogoImageUrl = s3Service.upload(multipartFile);
+            String newworkInfraImageUrl = s3Service.upload(multipartFile2);
+            jobInfo.updateAll(jobRequestDto, newlogoImageUrl, newworkInfraImageUrl);
+
+            if (StringUtils.hasText(logoImageUrl)) {
+                s3Service.delete(logoImageUrl);
+            }
+            if (StringUtils.hasText(workInfraImageUrl)) {
+                s3Service.delete(workInfraImageUrl);
+            }
+            jobInfo.update(jobRequestDto);
+        }
     }
 
     private JobInfo findJobInfo(Long id) {
