@@ -23,7 +23,10 @@ public class UserService {
 
     public ApiResponse<?> signup(SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
-        UserGenderEnum gender = requestDto.getGender().equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+        UserGenderEnum gender = UserGenderEnum.ENTERPRISE;
+        if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()) {
+            gender = requestDto.getGender().equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+        }
         UserRoleEnum role = UserRoleEnum.USER;
         String  enterpriseCode = requestDto.getEnterpriseCode();
         int [] enterpriseCodeArr = StringToIntArray(enterpriseCode);
