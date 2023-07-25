@@ -1,5 +1,6 @@
 package sparta.kingdombe.domain.job.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sparta.kingdombe.domain.job.entity.JobInfo;
@@ -34,4 +35,15 @@ public class JobAllResponseDto {
         this.workinfraimage = jobInfo.getWorkInfraImage();
     }
 
+    @QueryProjection
+    public JobAllResponseDto(Long id, String companyname, String title, String location, Date recruitstartperiod, Date recruitendperiod, Long salary, LocalDateTime createdAt) {
+        this.id = id;
+        this.companyname = companyname;
+        this.title = title;
+        this.location = location;
+        this.recruitstartperiod = recruitstartperiod;
+        this.recruitendperiod = recruitendperiod;
+        this.salary = salary;
+        this.createdAt = createdAt;
+    }
 }

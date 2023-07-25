@@ -1,5 +1,6 @@
 package sparta.kingdombe.domain.story.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,6 +54,17 @@ public class StoryResponseDto {
         public StoryResponseDto build() {
             return new StoryResponseDto(id, title, content, liked, username, image, createdAt, commentList, viewCount);
         }
+    }
+
+    @QueryProjection
+    public StoryResponseDto(Long id, String title, String content, long liked, String username, long viewCount, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.liked = liked;
+        this.username = username;
+        this.viewCount = viewCount;
+        this.createdAt = createdAt;
     }
 }
 

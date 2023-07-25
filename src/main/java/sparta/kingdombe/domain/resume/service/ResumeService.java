@@ -1,6 +1,10 @@
 package sparta.kingdombe.domain.resume.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
@@ -27,12 +31,17 @@ public class ResumeService {
 
     // 전제 조회
     @Transactional(readOnly = true)
-    public ApiResponse<?> findAllResume() {
-        List<ResumeResponseDto> resumeList = resumeRepository.findAll()
-                .stream()
+    public ApiResponse<?> findAllResume(int page) {
+
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<Resume> resumeList = resumeRepository.findAll(pageable);
+
+        List<ResumeResponseDto> result = resumeList.stream()
                 .map(ResumeResponseDto::new)
                 .collect(Collectors.toList());
-        return ok(resumeList);
+        int totalPages = resumeList.getTotalPages();
+        PageImpl pageimpl = new PageImpl(result, pageable, totalPages); // 전체 페이지 수, 현재 페이지 위치,
+        return ok(pageimpl);
     }
 
     // 상세 조회
@@ -78,5 +87,12 @@ public class ResumeService {
         if (!(resume.getUser().getId().equals(user.getId()))) {
             throw new InvalidConditionException(ErrorCodeEnum.USER_NOT_MATCH);
         }
+    }
+
+    public List<ResumeResponseDto> findResumeByCareer(String career) {
+        return resumeRepository.findByCareer(career)
+                .stream()
+                .map(ResumeResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

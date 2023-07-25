@@ -2,13 +2,16 @@ package sparta.kingdombe.domain.job.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
+import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.service.JobService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequestMapping("/api/job")
@@ -54,5 +57,11 @@ public class JobController {
     public ApiResponse<?> deleteJob(@PathVariable("jobId") Long id,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return jobService.delete(id, userDetails.getUser());
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<?> searchJobInfo(JobSearchCondition condition, Pageable pageable) {
+        log.info("condition title = {}", condition.getTitle());
+        return ResponseUtils.ok(jobService.searchJobInfo(condition, pageable));
     }
 }

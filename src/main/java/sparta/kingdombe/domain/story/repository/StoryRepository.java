@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sparta.kingdombe.domain.story.entity.Story;
 
-public interface StoryRepository extends JpaRepository<Story, Long> {
+public interface StoryRepository extends JpaRepository<Story, Long>, StoryRepositoryCustom {
 
     Page<Story> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

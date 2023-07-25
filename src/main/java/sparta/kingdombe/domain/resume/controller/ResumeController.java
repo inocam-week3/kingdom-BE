@@ -7,6 +7,7 @@ import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
 import sparta.kingdombe.domain.resume.service.ResumeService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,8 +17,8 @@ public class ResumeController {
 
     // 전체 조회
     @GetMapping
-    public ApiResponse<?> getResumes() {
-        return resumeService.findAllResume();
+    public ApiResponse<?> getResumes(@RequestParam("page") int page) {
+        return resumeService.findAllResume(page);
     }
 
     // 상세 조회
@@ -43,4 +44,10 @@ public class ResumeController {
     public ApiResponse<?> deleteResume(@PathVariable Long resumeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return resumeService.deleteResume(resumeId, userDetails.getUser());
     }
+
+    @GetMapping("/search")
+    public ApiResponse<?> searchByCareer(String career) {
+        return ResponseUtils.ok(resumeService.findResumeByCareer(career));
+    }
+
 }
