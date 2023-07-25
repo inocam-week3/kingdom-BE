@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface StoryRepository extends JpaRepository<Story, Long> {
 
-    @Query("select s from Story s join fetch s.user")
-    List<Story> findAll();
 }
