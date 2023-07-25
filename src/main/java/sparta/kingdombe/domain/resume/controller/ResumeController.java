@@ -17,8 +17,8 @@ public class ResumeController {
 
     // 전체 조회
     @GetMapping
-    public ApiResponse<?> getResumes() {
-        return resumeService.findAllResume();
+    public ApiResponse<?> getResumes(@RequestParam("page") int page) {
+        return resumeService.findAllResume(page);
     }
 
     // 상세 조회
@@ -45,7 +45,7 @@ public class ResumeController {
         return resumeService.deleteResume(resumeId, userDetails.getUser());
     }
 
-    @GetMapping("/serch")
+    @GetMapping("/search")
     public ApiResponse<?> searchByCareer(String career) {
         return ResponseUtils.ok(resumeService.findResumeByCareer(career));
     }

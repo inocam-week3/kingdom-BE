@@ -3,30 +3,47 @@ package sparta.kingdombe.domain.job.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import sparta.kingdombe.domain.job.dto.JobAllResponseDto;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
+import sparta.kingdombe.domain.job.dto.QJobAllResponseDto;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.entity.QJobInfo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.util.StringUtils.hasText;
 import static sparta.kingdombe.domain.job.entity.QJobInfo.*;
 import static sparta.kingdombe.domain.story.entity.QStory.story;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JobRepositoryCustomImpl implements JobRepositoryCustom{
 
     private final JPAQueryFactory query;
 
     @Override
-    public Page<JobInfo> searchJob(JobSearchCondition condition, Pageable pageable) {
+    public Page<JobAllResponseDto> searchJob(JobSearchCondition condition, Pageable pageable) {
 
-        List<JobInfo> content = query
-                .selectFrom(jobInfo)
+        log.info("쿼리 실행 전");
+
+        List<JobAllResponseDto> content = query
+                .select(new QJobAllResponseDto(
+                        jobInfo.id,
+                        jobInfo.companyname,
+                        jobInfo.title,
+                        jobInfo.location,
+                        jobInfo.recruitmentStartPeriod,
+                        jobInfo.recruitmentEndPeriod,
+                        jobInfo.salary,
+                        jobInfo.createdAt
+                ))
+                .from(jobInfo)
                 .where(
                         titleLike(condition.getTitle()),
                         locationEq(condition.getLocation()),
@@ -47,6 +64,7 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
                 .fetch()
                 .size();
 
+        log.info("쿼리 실행 후");
         return new PageImpl<>(content, pageable, total);
     }
 
@@ -59,10 +77,10 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
     }
 
     private BooleanExpression salaryGoe(Long salaryCond) {
-        return hasText(String.valueOf(salaryCond)) ? jobInfo.salary.goe(salaryCond) : null;
+        return salaryCond != null ? jobInfo.salary.goe(salaryCond) : null;
     }
 
     private BooleanExpression personNumGoe(Long personNumCond) {
-        return hasText(String.valueOf(personNumCond)) ? jobInfo.recruitmentPersonNum.goe(personNumCond) : null;
+        return personNumCond != null ? jobInfo.recruitmentPersonNum.goe(personNumCond) : null;
     }
 }

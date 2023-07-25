@@ -1,6 +1,7 @@
 package sparta.kingdombe.domain.story.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import sparta.kingdombe.global.utils.ResponseUtils;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/stories")
+@Slf4j
 public class StoryController {
 
     private final StoryService storyService;
@@ -52,7 +54,8 @@ public class StoryController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<?> searchPost(StorySearchCondition condition, Pageable pageable) {
+    public ApiResponse<?> searchStory(StorySearchCondition condition, Pageable pageable) {
+        log.info("title = {}", condition.getTitle());
         return ResponseUtils.ok(storyService.searchStory(condition, pageable));
     }
 }

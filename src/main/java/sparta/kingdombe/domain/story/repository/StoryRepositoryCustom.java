@@ -7,5 +7,5 @@ import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 
 public interface StoryRepositoryCustom {
 
-    Page<StoryResponseDto> searchStory(StorySearchCondition storySearchCondition, Pageable pageable);
+    Page<StoryResponseDto> searchStory(StorySearchCondition condition, Pageable pageable);
 }

@@ -61,6 +61,7 @@ public class JobController {
 
     @GetMapping("/search")
     public ApiResponse<?> searchJobInfo(JobSearchCondition condition, Pageable pageable) {
+        log.info("condition title = {}", condition.getTitle());
         return ResponseUtils.ok(jobService.searchJobInfo(condition, pageable));
     }
 }

@@ -1,9 +1,10 @@
 package sparta.kingdombe.domain.job.dto;
 
-import lombok.Getter;
+import lombok.Data;
+
 import lombok.RequiredArgsConstructor;
 
-@Getter
+@Data
 @RequiredArgsConstructor
 public class JobSearchCondition {
 
