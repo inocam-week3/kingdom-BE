@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.home.dto.HomeJobResponseDto;
 import sparta.kingdombe.domain.home.dto.HomeStoryResponseDto;
+import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
@@ -26,7 +27,9 @@ public class HomeService {
     private final StoryRepository storyRepository;
 
     public ApiResponse<?> getHome() throws IOException {
-        List<HomeJobResponseDto> result = jobRepository.findAll()
+        Pageable pageable = PageRequest.of(0,40);
+
+        List<HomeJobResponseDto> result = jobRepository.findAllByOrderByCreatedAtDesc(pageable)
                 .stream()
                 .map(HomeJobResponseDto::new)
                 .collect(Collectors.toList());
