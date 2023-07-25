@@ -29,7 +29,7 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final S3Service s3Service;
 
-
+    @Transactional(readOnly = true)
     public ApiResponse<?> findAllStory(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -46,7 +46,7 @@ public class StoryService {
                         .image(story.getImage())
                         .createdAt(story.getCreatedAt())
                         .viewCount(story.getViewCount())
-                        .commentList(story.getCommentList().stream().map(comment -> new CommentResponseDto(comment)).toList())
+                        .commentList(story.getCommentList().stream().map(CommentResponseDto::new).toList())
                         .build())
                 .collect(Collectors.toList());
         ;
