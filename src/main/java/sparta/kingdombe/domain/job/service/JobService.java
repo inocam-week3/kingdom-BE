@@ -2,6 +2,10 @@ package sparta.kingdombe.domain.job.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +17,6 @@ import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
-import sparta.kingdombe.domain.story.dto.StoryRequestDto;
-import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.service.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
@@ -34,12 +36,21 @@ public class JobService {
     private final JobRepository jobRepository;
     private final S3Service s3Service;
 
-    public ApiResponse<?> findAllJobInfo() {
-        List<JobAllResponseDto> jobInfoList = jobRepository.findAll()
+    @Transactional(readOnly = true)
+    public ApiResponse<?> findAllJobInfo(int page) {
+
+        Pageable pageable =  PageRequest.of(page,5);
+        Page<JobInfo> jobInfoPage = jobRepository.findAll(pageable);
+
+        List<JobAllResponseDto> jobInfoList = jobInfoPage
                 .stream()
                 .map(JobAllResponseDto::new)
                 .collect(Collectors.toList());
-        return ok(jobInfoList);
+
+        int totalPage = jobInfoPage.getTotalPages();
+        PageImpl pageimpl = new PageImpl<>(jobInfoList, pageable, totalPage);
+        // 해당 페이지에 들어갈 내용(리스트) , 오청한 페이지 정보 , 들어갈 내용들의 양
+        return ok(pageimpl);
     }
 
     public ApiResponse<?> findJobInfoById(Long id) {
