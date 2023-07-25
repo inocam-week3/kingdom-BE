@@ -1,13 +1,12 @@
 package sparta.kingdombe.domain.story.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
+import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.service.StoryService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
@@ -16,14 +15,14 @@ import sparta.kingdombe.global.utils.ResponseUtils;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/stories")
-@Slf4j
 public class StoryController {
 
     private final StoryService storyService;
 
     @GetMapping
-    public ApiResponse<?> readAllStory() {
-        return storyService.findAllStory();
+    public ApiResponse<?> readAllStory(@RequestParam("page") int page,
+                                       @RequestParam("size") int size) {
+        return storyService.findAllStory(page - 1, size); // ?page=1&size=10
     }
 
     @GetMapping("/{storyId}")
@@ -55,7 +54,6 @@ public class StoryController {
 
     @GetMapping("/search")
     public ApiResponse<?> searchStory(StorySearchCondition condition, Pageable pageable) {
-        log.info("title = {}", condition.getTitle());
         return ResponseUtils.ok(storyService.searchStory(condition, pageable));
     }
 }

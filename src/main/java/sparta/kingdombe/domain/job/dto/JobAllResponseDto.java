@@ -19,6 +19,8 @@ public class JobAllResponseDto {
     private Date recruitendperiod;
     private Long salary;
     private LocalDateTime createdAt;
+    private String logoimage;
+    private String workinfraimage;
 
     public JobAllResponseDto(JobInfo jobInfo) {
         this.id = jobInfo.getId();
@@ -29,6 +31,8 @@ public class JobAllResponseDto {
         this.recruitendperiod = jobInfo.getRecruitmentEndPeriod();
         this.salary = jobInfo.getSalary();
         this.createdAt = jobInfo.getCreatedAt();
+        this.logoimage = jobInfo.getLogoImage();
+        this.workinfraimage = jobInfo.getWorkInfraImage();
     }
 
     @QueryProjection

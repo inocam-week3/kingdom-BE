@@ -23,6 +23,9 @@ public class JobResponseDto {
     private Long salary;
     private LocalDateTime createdAt;
 
+    private String logoimage;
+    private String workinfraimage;
+
 
     public JobResponseDto(JobInfo jobInfo) {
         this.id = jobInfo.getId();
@@ -37,5 +40,7 @@ public class JobResponseDto {
         this.recruitpersonnum = jobInfo.getRecruitmentPersonNum();
         this.salary = jobInfo.getSalary();
         this.createdAt = jobInfo.getCreatedAt();
+        this.logoimage = jobInfo.getLogoImage();
+        this.workinfraimage = jobInfo.getWorkInfraImage();
     }
 }
