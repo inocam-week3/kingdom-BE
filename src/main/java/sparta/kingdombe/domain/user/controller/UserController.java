@@ -17,12 +17,12 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
     @PostMapping("/auth/signup")
-    public String signup(@RequestBody @Valid SignupRequestDto requestDto){
+    public ApiResponse<?> signup(@RequestBody @Valid SignupRequestDto requestDto){
         return userService.signup(requestDto);
     }
 
     @GetMapping("/auth/email")
-    public String checkEmail(@RequestParam String email){
+    public ApiResponse<?> checkEmail(@RequestParam String email){
         return userService.checkEmail(email);
     }
     @GetMapping("/auth/kakao") // GET https://kauth.kakao.com/oauth/authorize?client_id=ca694ae46e22b997351afa5a92c6c63a&response_type=code&redirect_uri=http://localhost:8080/api/auth/kakao

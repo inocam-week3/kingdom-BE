@@ -24,8 +24,6 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserGenderEnum gender;
     @Column
-    private String enterpriseCode;
-    @Column
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
     @Column
@@ -36,7 +34,6 @@ public class User {
         this.password = password;
         this.username = requestDto.getUsername();
         this.gender = gender;
-        this.enterpriseCode = requestDto.getEnterpriseCode();
         this.role = role;
     }
 
