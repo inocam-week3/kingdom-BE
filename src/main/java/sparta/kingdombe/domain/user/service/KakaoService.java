@@ -50,8 +50,8 @@ public class KakaoService {
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 토큰 반환
-        String accessToken = jwtProvider.createAccessToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername());
-        String refreshToken = jwtProvider.createRefreshToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername());
+        String accessToken = jwtProvider.createAccessToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender());
+        String refreshToken = jwtProvider.createRefreshToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender());
         jwtProvider.addAccessJwtHeader(accessToken, response);
         jwtProvider.addRefreshJwtHeader(refreshToken, response);
 
@@ -75,7 +75,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "ca694ae46e22b997351afa5a92c6c63a");
-        body.add("redirect_uri", "http://localhost:8080/api/auth/kakao");
+        body.add("redirect_uri", "http://44.211.246.195/api/auth/kakao");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity

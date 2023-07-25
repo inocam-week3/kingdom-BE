@@ -40,6 +40,7 @@ public class StoryService {
                         .content(story.getContent())
                         .liked(story.getLiked())
                         .username(story.getUser().getUsername())
+                        .image(story.getImage())
                         .createdAt(story.getCreatedAt())
                         .viewCount(story.getViewCount())
                         .commentList(story.getCommentList().stream().map(comment -> new CommentResponseDto(comment)).toList())

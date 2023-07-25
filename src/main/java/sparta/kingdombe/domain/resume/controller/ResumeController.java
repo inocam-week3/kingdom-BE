@@ -27,12 +27,6 @@ public class ResumeController {
         return resumeService.getSelectedResume(resumeId);
     }
 
-    // 작성 페이지 조회
-    @GetMapping("/write")
-    public ApiResponse<?> getReadResume(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return resumeService.getReadResume(userDetails.getUser());
-    }
-
     // 인재 정보 작성
     @PostMapping("/write")
     public ApiResponse<?> createResume(@RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {

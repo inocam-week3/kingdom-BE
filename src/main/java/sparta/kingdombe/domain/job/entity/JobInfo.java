@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.utils.Timestamped;
@@ -48,14 +49,17 @@ public class JobInfo extends Timestamped {
     private String companyname;
 
     @Column
-    private String images;
+    private String logoImage;
+
+    @Column
+    private String workInfraImage;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    public JobInfo(JobRequestDto jobRequestDto, User user) {
+    public JobInfo(JobRequestDto jobRequestDto, String image, String image2, User user) {
         this.title = jobRequestDto.getTitle();
         this.location = jobRequestDto.getLocation();
         this.content = jobRequestDto.getContent();
@@ -64,7 +68,22 @@ public class JobInfo extends Timestamped {
         this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
         this.salary = jobRequestDto.getSalary();
         this.companyname = jobRequestDto.getCompanyname();
+        this.logoImage = image;
+        this.workInfraImage = image2;
         this.user = user;
+    }
+
+    public void updateAll(JobRequestDto jobRequestDto, String image, String image2) {
+        this.title = jobRequestDto.getTitle();
+        this.location = jobRequestDto.getLocation();
+        this.content = jobRequestDto.getContent();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.salary = jobRequestDto.getSalary();
+        this.companyname = jobRequestDto.getCompanyname();
+        this.logoImage = image;
+        this.workInfraImage = image2;
     }
 
     public void update(JobRequestDto jobRequestDto) {

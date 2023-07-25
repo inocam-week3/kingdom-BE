@@ -32,7 +32,7 @@ public class KingdomExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ApiResponse<?> handleRunttimeException(RuntimeException e) {
+    public ApiResponse<?> handleRuntimeException(RuntimeException e) {
         log.error("error message = {}", e.getMessage());
         return ResponseUtils.error(e.getMessage(), BAD_REQUEST.value());
     }

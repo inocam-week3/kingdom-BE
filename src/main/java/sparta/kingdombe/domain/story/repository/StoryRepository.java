@@ -1,13 +1,11 @@
 package sparta.kingdombe.domain.story.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import sparta.kingdombe.domain.story.entity.Story;
 
-import java.util.List;
+public interface StoryRepository extends JpaRepository<Story, Long> {
 
-public interface StoryRepository extends JpaRepository<Story, Long>, StoryRepositoryCustom {
-
-    @Query("select s from Story s join fetch s.user")
-    List<Story> findAll();
+    Page<Story> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

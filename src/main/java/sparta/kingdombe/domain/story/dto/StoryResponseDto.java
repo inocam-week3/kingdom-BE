@@ -23,6 +23,7 @@ public class StoryResponseDto {
     private String content;
     private long liked;
     private String username;
+    private String image;
     private LocalDateTime createdAt;
     private List<CommentResponseDto> commentList;
     private long viewCount;
@@ -35,6 +36,8 @@ public class StoryResponseDto {
         this.username = story.getUser().getUsername();
         this.createdAt = story.getCreatedAt();
         this.viewCount = story.getViewCount();
+        this.image = story.getImage();
+        this.commentList = story.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 
     public static class Builder {
@@ -49,7 +52,7 @@ public class StoryResponseDto {
         private String image;
 
         public StoryResponseDto build() {
-            return new StoryResponseDto(id, title, content, liked, username, createdAt, commentList, viewCount);
+            return new StoryResponseDto(id, title, content, liked, username, image, createdAt, commentList, viewCount);
         }
     }
 
