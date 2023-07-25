@@ -13,6 +13,7 @@ import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.global.responseDto.ApiResponse;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +35,7 @@ public class HomeService {
                 .map(HomeJobResponseDto::new)
                 .collect(Collectors.toList());
 
-        return new ApiResponse<>(true, result, null);
+        return ResponseUtils.ok(result);
     }
 
     public ApiResponse<?> getStory() throws IOException {
@@ -46,6 +47,6 @@ public class HomeService {
                 .stream()
                 .map(HomeStoryResponseDto::new)
                 .collect(Collectors.toList());
-        return new ApiResponse<>(true, result, null);
+        return ResponseUtils.ok(result);
     }
 }
