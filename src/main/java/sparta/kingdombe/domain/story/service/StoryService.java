@@ -32,7 +32,7 @@ public class StoryService {
 
     public ApiResponse<?> findAllStory(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<Story> storyList = storyRepository.findAllByOrderByCreatedAtDesc(pageable);
 
         List<StoryResponseDto> result = storyList
@@ -80,18 +80,24 @@ public class StoryService {
         return ok("삭제 완료");
     }
 
+    // 이미지가 존재하면 이미지와 내용물을 바꾸고
+    // 이미지가 없으면 내용만 변경
+    // 이미지가 존재하면 먼저 이미지 변경
+    // -> 그다음 내용변경
     private void updateStoryDetail(StoryRequestDto storyRequestDto, MultipartFile image, Story story) {
         if (image != null && !image.isEmpty()) {
             String existingImageUrl = story.getImage();
             String imageUrl = s3Service.upload(image);
-            story.updateAll(storyRequestDto, imageUrl);
+            story.updateImage(imageUrl);
 
             // 새로운 이미지 업로드 후에 기존 이미지 삭제
             if (StringUtils.hasText(existingImageUrl)) {
                 s3Service.delete(existingImageUrl);
             }
-            story.update(storyRequestDto);
+
         }
+
+        story.update(storyRequestDto);
     }
 
     private void deleteImage(Story story) {
