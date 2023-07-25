@@ -15,5 +15,5 @@ public class SignupRequestDto {
     @NotBlank
     private String username;
     private String gender;
-    private String enterpriseCode;
+    private Long enterpriseCode;
 }

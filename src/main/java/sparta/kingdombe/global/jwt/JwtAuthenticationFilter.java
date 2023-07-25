@@ -57,10 +57,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 성공 및 JWT 생성");
         ObjectMapper objectMapper = new ObjectMapper();
         String email = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
+        String name = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtProvider.createToken(email, role); // 토큰에 email과 권한(유저 or 기업)만 넣어둠
-        jwtProvider.addJwtHeader(token, response);
+        String accessToken = jwtProvider.createAccessToken(email, role, name); // access token 생성
+        String refreshToken = jwtProvider.createRefreshToken(email, role, name); // refresh token 생성
+
+        jwtProvider.addAccessJwtHeader(accessToken, response);
+        jwtProvider.addRefreshJwtHeader(refreshToken, response);
 
         ApiResponse<?> apiResponse = okWithMessage(USER_LOGIN_SUCCESS);
 
