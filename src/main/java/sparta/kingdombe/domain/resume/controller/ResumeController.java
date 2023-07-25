@@ -16,8 +16,8 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     // 전체 조회
-    @GetMapping
-    public ApiResponse<?> getResumes(@RequestParam("page") int page) {
+    @GetMapping("/search")
+    public ApiResponse<?> getResumes(@RequestParam("career") int page) {
         return resumeService.findAllResume(page);
     }
 
