@@ -3,7 +3,6 @@ package sparta.kingdombe.domain.resume.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sparta.kingdombe.domain.resume.dto.ResumeReadResponseDto;
 import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
 import sparta.kingdombe.domain.resume.dto.ResumeResponseDto;
 import sparta.kingdombe.domain.resume.entity.Resume;
@@ -44,11 +43,6 @@ public class ResumeService {
                 .orElseThrow(() ->
                         new InvalidConditionException(ErrorCodeEnum.POST_NOT_EXIST));
         return ok(new ResumeResponseDto(resume));
-    }
-
-    // 작성 페이지 조회
-    public ApiResponse<?> getReadResume(User user) {
-        return ok(new ResumeReadResponseDto(user));
     }
 
     // 인재 정보 생성
