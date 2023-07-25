@@ -59,7 +59,4 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     private BooleanExpression contentLike(String contentCond) {
         return hasText(contentCond) ? story.content.like("%" + contentCond + "%") : null;
     }
-
-
-
 }

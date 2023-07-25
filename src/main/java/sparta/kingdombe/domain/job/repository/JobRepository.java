@@ -5,7 +5,7 @@ import sparta.kingdombe.domain.job.entity.JobInfo;
 
 import java.util.List;
 
-public interface JobRepository extends JpaRepository<JobInfo, Long> {
+public interface JobRepository extends JpaRepository<JobInfo, Long>, JobRepositoryCustom {
 
     List<JobInfo> findAll();
 }

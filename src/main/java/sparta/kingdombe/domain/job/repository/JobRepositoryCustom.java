@@ -4,8 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
+import sparta.kingdombe.domain.job.entity.JobInfo;
 
 public interface JobRepositoryCustom {
 
-    Page<JobResponseDto> searchJob(JobSearchCondition condition, Pageable pageable);
+    Page<JobInfo> searchJob(JobSearchCondition condition, Pageable pageable);
 }
