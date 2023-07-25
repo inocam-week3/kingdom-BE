@@ -2,6 +2,8 @@ package sparta.kingdombe.domain.job.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import sparta.kingdombe.domain.job.dto.JobAllResponseDto;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
+import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
@@ -109,5 +112,9 @@ public class JobService {
        JobInfo jobInfo = findJobInfo(id);
         if (!(jobInfo.getUser().getId().equals(user.getId())))
             throw new IllegalArgumentException("채용공고는 작성자만 수정,삭제가 가능합니다");
+    }
+
+    public Page<JobAllResponseDto> searchJobInfo(JobSearchCondition condition, Pageable pageable) {
+        return jobRepository.searchJob(condition, pageable);
     }
 }

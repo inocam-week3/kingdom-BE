@@ -5,10 +5,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.service.StoryService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +50,10 @@ public class StoryController {
     public ApiResponse<?> deleteStory(@PathVariable Long storyId,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         return storyService.deleteStory(storyId, userDetailsImpl.getUser());
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<?> searchStory(StorySearchCondition condition, Pageable pageable) {
+        return ResponseUtils.ok(storyService.searchStory(condition, pageable));
     }
 }
