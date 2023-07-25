@@ -1,6 +1,8 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -8,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
+import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
@@ -48,6 +51,7 @@ public class StoryService {
 
     public ApiResponse<?> findOnePost(Long storyId) {
         Story story = findStory(storyId);
+        story.increaseViewCount();
         StoryResponseDto storyResponseDto = new StoryResponseDto(story);
         return ok(storyResponseDto);
     }
@@ -97,7 +101,6 @@ public class StoryService {
     private Story findStory(Long storyId) {
         Story story = storyRepository.findById(storyId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
-        story.increaseViewCount();
         return story;
     }
 
@@ -109,5 +112,7 @@ public class StoryService {
         return story;
     }
 
-
+    public Page<StoryResponseDto> searchStory(StorySearchCondition condition, Pageable pageable) {
+        return storyRepository.searchStory(condition, pageable);
+    }
 }

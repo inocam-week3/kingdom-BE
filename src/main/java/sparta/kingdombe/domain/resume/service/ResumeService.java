@@ -85,4 +85,11 @@ public class ResumeService {
             throw new InvalidConditionException(ErrorCodeEnum.USER_NOT_MATCH);
         }
     }
+
+    public List<ResumeResponseDto> findResumeByCareer(String career) {
+        return resumeRepository.findByCareer(career)
+                .stream()
+                .map(ResumeResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

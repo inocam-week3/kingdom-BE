@@ -1,13 +1,16 @@
 package sparta.kingdombe.domain.story.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
+import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.service.StoryService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,5 +49,10 @@ public class StoryController {
     public ApiResponse<?> deleteStory(@PathVariable Long storyId,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         return storyService.deleteStory(storyId, userDetailsImpl.getUser());
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<?> searchPost(StorySearchCondition condition, Pageable pageable) {
+        return ResponseUtils.ok(storyService.searchStory(condition, pageable));
     }
 }

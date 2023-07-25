@@ -7,6 +7,7 @@ import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
 import sparta.kingdombe.domain.resume.service.ResumeService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,4 +50,10 @@ public class ResumeController {
     public ApiResponse<?> deleteResume(@PathVariable Long resumeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return resumeService.deleteResume(resumeId, userDetails.getUser());
     }
+
+    @GetMapping("/serch")
+    public ApiResponse<?> searchByCareer(String career) {
+        return ResponseUtils.ok(resumeService.findResumeByCareer(career));
+    }
+
 }

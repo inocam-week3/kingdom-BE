@@ -6,7 +6,7 @@ import sparta.kingdombe.domain.story.entity.Story;
 
 import java.util.List;
 
-public interface StoryRepository extends JpaRepository<Story, Long> {
+public interface StoryRepository extends JpaRepository<Story, Long>, StoryRepositoryCustom {
 
     @Query("select s from Story s join fetch s.user")
     List<Story> findAll();
