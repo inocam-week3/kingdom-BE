@@ -2,7 +2,8 @@ package sparta.kingdombe.domain.user.entity;
 
 public enum UserGenderEnum {
     MALE("Male"),
-    FEMALE("Female");
+    FEMALE("Female"),
+    ENTERPRISE("Enterprise");
     private final String gender;
 
     UserGenderEnum(String gender){

@@ -23,11 +23,13 @@ public class UserService {
 
     public ApiResponse<?> signup(SignupRequestDto requestDto) {
         String password = passwordEncoder.encode(requestDto.getPassword());
-        UserGenderEnum gender = requestDto.getGender().equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+        UserGenderEnum gender = UserGenderEnum.ENTERPRISE;
+        if(requestDto.getGender() != null && !requestDto.getGender().isEmpty()) {
+            gender = requestDto.getGender().equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+        }
         UserRoleEnum role = UserRoleEnum.USER;
-        Long enterpriseCode = requestDto.getEnterpriseCode();
-        int [] enterpriseCodeArr = longToIntArray(enterpriseCode);
-        System.out.println(enterpriseCodeArr.length);
+        String  enterpriseCode = requestDto.getEnterpriseCode();
+        int [] enterpriseCodeArr = StringToIntArray(enterpriseCode);
         if(enterpriseCodeArr.length == 10){
             // 검증
             int sum = 0;
@@ -37,10 +39,8 @@ public class UserService {
                     case 1 : sum += enterpriseCodeArr[i]*3; break;
                     case 2 : sum += enterpriseCodeArr[i]*7; break;
                 }
-                System.out.println(enterpriseCodeArr[i]);
             }
             sum += enterpriseCodeArr[8]*11/2;
-            System.out.println(sum);
             role = enterpriseCodeArr[9]== 10-(sum%10) ? UserRoleEnum.ENTERPRISE : UserRoleEnum.USER;
         }
         User user = new User(requestDto, password, gender, role);
@@ -55,11 +55,10 @@ public class UserService {
         return okWithMessage(CHECK_EMAIL_SUCCESS);
     }
 
-    public static int[] longToIntArray(long number) {
-        String numberStr = String.valueOf(number);
-        int[] intArray = new int[numberStr.length()];
-        for (int i = 0; i < numberStr.length(); i++) {
-            intArray[i] = Character.getNumericValue(numberStr.charAt(i));
+    public static int[] StringToIntArray(String enterpriseCode) {
+        int[] intArray = new int[enterpriseCode.length()];
+        for (int i = 0; i < enterpriseCode.length(); i++) {
+            intArray[i] = Character.getNumericValue(enterpriseCode.charAt(i));
         }
         return intArray;
     }
