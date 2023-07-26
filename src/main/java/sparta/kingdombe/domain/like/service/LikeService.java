@@ -21,19 +21,19 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final StoryRepository storyRepository;
 
-    public ApiResponse<?> updateLike(Long storyId, User user) {
+    public StoryResponseDto updateLike(Long storyId, User user) {
         Story story = storyRepository.findById(storyId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
 
         if (!isLikedStory(story, user)) {
             createLike(story, user);
             story.increaseLike();
-            return ok(new StoryResponseDto(story));
+            return new StoryResponseDto(story);
         }
 
         removeLike(story, user);
         story.decreaseLike();
-        return ok(new StoryResponseDto(story));
+        return new StoryResponseDto(story);
     }
 
     private boolean isLikedStory(Story story, User user) {

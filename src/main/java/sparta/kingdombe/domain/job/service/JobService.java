@@ -2,8 +2,8 @@ package sparta.kingdombe.domain.job.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +16,7 @@ import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
-import sparta.kingdombe.domain.story.dto.StoryRequestDto;
-import sparta.kingdombe.domain.story.entity.Story;
-import sparta.kingdombe.domain.story.service.S3Service;
+import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
@@ -37,40 +35,48 @@ public class JobService {
     private final JobRepository jobRepository;
     private final S3Service s3Service;
 
-    public ApiResponse<?> findAllJobInfo() {
-        List<JobAllResponseDto> jobInfoList = jobRepository.findAll()
-                .stream()
+    @Transactional(readOnly = true)
+    public Page<JobAllResponseDto> findAllJobInfo(int page) {
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Page<JobInfo> jobInfoPage = jobRepository.findAll(pageable);
+
+        List<JobAllResponseDto> jobInfoList = jobInfoPage.stream()
                 .map(JobAllResponseDto::new)
                 .collect(Collectors.toList());
-        return ok(jobInfoList);
+
+        int totalPage = jobInfoPage.getTotalPages();
+
+        // 해당 페이지에 들어갈 내용(리스트) , 요청한 페이지 정보 , 들어갈 내용들의 양
+        return new PageImpl<>(jobInfoList, pageable, totalPage);
     }
 
-    public ApiResponse<?> findJobInfoById(Long id) {
-        return ok(new JobResponseDto(findJobInfo(id)));
+    public JobResponseDto findJobInfoById(Long id) {
+        return new JobResponseDto(findJobInfo(id));
     }
 
-    public ApiResponse<?> createJob(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
+    public JobResponseDto createJob(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
         String image = s3Service.upload(multipartFile);
         String image2 = s3Service.upload(multipartFile2);
         JobInfo jobInfo = new JobInfo(jobRequestDto, image, image2, user);
         jobRepository.save(jobInfo);
-        return okWithMessage(JOB_CREATE_SUCCESS);
+        return new JobResponseDto(jobInfo);
     }
 
 
-    public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
+    public JobResponseDto update(Long id, JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
         JobInfo jobinfo = findJobInfo(id);
         checkUsername(id, user);
         updateStoryDetail(jobRequestDto, multipartFile, multipartFile2, jobinfo);
-        return okWithMessage(JOB_MODIFY_SUCCESS);
+        return new JobResponseDto(jobinfo);
     }
 
-    public ApiResponse<?> delete(Long id, User user) {
+    public String delete(Long id, User user) {
         JobInfo jobInfo = findJobInfo(id);
         checkUsername(id, user);
         deleteImage(jobInfo);
         jobRepository.delete(jobInfo);
-        return okWithMessage(JOB_DELETE_SUCCESS);
+        return "삭제완료";
     }
 
     private void deleteImage(JobInfo jobInfo) {

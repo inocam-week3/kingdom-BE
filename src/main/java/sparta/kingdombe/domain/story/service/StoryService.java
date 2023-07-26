@@ -1,26 +1,23 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
+import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
-import sparta.kingdombe.global.responseDto.ApiResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 
 @Service
 @RequiredArgsConstructor
@@ -31,61 +28,47 @@ public class StoryService {
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public ApiResponse<?> findAllStory(int page, int size) {
+    public Page<StoryResponseDto> findAllStory(int page) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Story> storyList = storyRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
                 .stream()
-                .map(story -> StoryResponseDto.builder()
-                        .id(story.getId())
-                        .title(story.getTitle())
-                        .content(story.getContent())
-                        .liked(story.getLiked())
-                        .username(story.getUser().getUsername())
-                        .image(story.getImage())
-                        .createdAt(story.getCreatedAt())
-                        .viewCount(story.getViewCount())
-                        .commentList(story.getCommentList().stream().map(CommentResponseDto::new).toList())
-                        .build())
+                .map(story -> new StoryResponseDto().All(story))
                 .collect(Collectors.toList());
-        ;
-        return ok(result);
+
+        int totalPages = storyList.getTotalPages();
+
+        return new PageImpl<>(result, pageable, totalPages);
     }
 
-    public ApiResponse<?> findOnePost(Long storyId) {
+    public StoryResponseDto findOnePost(Long storyId) {
         Story story = findStory(storyId);
         story.increaseViewCount();
-        StoryResponseDto storyResponseDto = new StoryResponseDto(story);
-        return ok(storyResponseDto);
+        return new StoryResponseDto(story);
     }
 
-    public ApiResponse<?> createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {
+    public StoryResponseDto createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {
         String image = s3Service.upload(file);
         Story story = new Story(storyRequestDto, image, user);
         storyRepository.save(story);
-        return ok(new StoryResponseDto(story));
+        return new StoryResponseDto(story);
     }
 
-    public ApiResponse<?> updateStory(Long storyId, StoryRequestDto storyRequestDto, MultipartFile file, User user) {
+    public StoryResponseDto updateStory(Long storyId, StoryRequestDto storyRequestDto, MultipartFile file, User user) {
         Story story = confirmStory(storyId, user);
         updateStoryDetail(storyRequestDto, file, story);
-        StoryResponseDto storyResponseDto = new StoryResponseDto(story);
-        return ok(storyResponseDto);
+        return new StoryResponseDto(story);
     }
 
-    public ApiResponse<?> deleteStory(Long storyId, User user) {
+    public String deleteStory(Long storyId, User user) {
         Story story = confirmStory(storyId, user);
         deleteImage(story);
         storyRepository.delete(story);
-        return ok("삭제 완료");
+        return "삭제 완료";
     }
 
-    // 이미지가 존재하면 이미지와 내용물을 바꾸고
-    // 이미지가 없으면 내용만 변경
-    // 이미지가 존재하면 먼저 이미지 변경
-    // -> 그다음 내용변경
     private void updateStoryDetail(StoryRequestDto storyRequestDto, MultipartFile image, Story story) {
         if (image != null && !image.isEmpty()) {
             String existingImageUrl = story.getImage();
@@ -96,9 +79,7 @@ public class StoryService {
             if (StringUtils.hasText(existingImageUrl)) {
                 s3Service.delete(existingImageUrl);
             }
-
         }
-
         story.update(storyRequestDto);
     }
 
@@ -117,9 +98,8 @@ public class StoryService {
 
     private Story confirmStory(Long storyId, User user) {
         Story story = findStory(storyId);
-        if (!user.getId().equals(story.getUser().getId())) {
+        if (!user.getId().equals(story.getUser().getId()))
             throw new IllegalArgumentException("게시글 작성자만 수정,삭제할 수 있습니다");
-        }
         return story;
     }
 

@@ -18,31 +18,31 @@ public class ResumeController {
     // 전체 조회
     @GetMapping
     public ApiResponse<?> getResumes(@RequestParam("page") int page) {
-        return resumeService.findAllResume(page);
+        return ResponseUtils.ok(resumeService.findAllResume(page));
     }
 
     // 상세 조회
     @GetMapping("/{resumeId}")
     public ApiResponse<?> getSelectedResume(@PathVariable Long resumeId) {
-        return resumeService.getSelectedResume(resumeId);
+        return ResponseUtils.ok(resumeService.getSelectedResume(resumeId));
     }
 
     // 인재 정보 작성
     @PostMapping("/write")
     public ApiResponse<?> createResume(@RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return resumeService.createResume(resumeRequestDto, userDetails.getUser());
+        return ResponseUtils.ok(resumeService.createResume(resumeRequestDto, userDetails.getUser()));
     }
 
     // 인재 정보 수정
     @PatchMapping("/{resumeId}")
     public ApiResponse<?> updateResume(@PathVariable Long resumeId, @RequestBody ResumeRequestDto resumeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return resumeService.updateResume(resumeId, resumeRequestDto, userDetails.getUser());
+        return ResponseUtils.ok(resumeService.updateResume(resumeId, resumeRequestDto, userDetails.getUser()));
     }
 
     // 인재 정보 삭제
     @DeleteMapping("/{resumeId}")
     public ApiResponse<?> deleteResume(@PathVariable Long resumeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return resumeService.deleteResume(resumeId, userDetails.getUser());
+        return ResponseUtils.ok(resumeService.deleteResume(resumeId, userDetails.getUser()));
     }
 
     @GetMapping("/search")

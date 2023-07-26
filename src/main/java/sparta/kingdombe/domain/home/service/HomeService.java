@@ -13,6 +13,7 @@ import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.global.responseDto.ApiResponse;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,26 +27,23 @@ public class HomeService {
     private final JobRepository jobRepository;
     private final StoryRepository storyRepository;
 
-    public ApiResponse<?> getHome() throws IOException {
-        Pageable pageable = PageRequest.of(0,40);
+    public List<HomeJobResponseDto> getJobInfoAtHome() {
 
-        List<HomeJobResponseDto> result = jobRepository.findAllByOrderByCreatedAtDesc(pageable)
+        List<HomeJobResponseDto> result = jobRepository.findJobInfoAtHome()
                 .stream()
                 .map(HomeJobResponseDto::new)
                 .collect(Collectors.toList());
 
-        return new ApiResponse<>(true, result, null);
+        return result;
     }
 
-    public ApiResponse<?> getStory() throws IOException {
-        Pageable pageable = PageRequest.of(0,10);
-        Page<Story> homeList = storyRepository.findAllByOrderByCreatedAtDesc(pageable);
+    public List<HomeStoryResponseDto> getStoryAtHome() {
 
-
-        List<HomeStoryResponseDto> result = homeList.getContent()
+        List<HomeStoryResponseDto> result = storyRepository.findStoryAtHome()
                 .stream()
                 .map(HomeStoryResponseDto::new)
                 .collect(Collectors.toList());
-        return new ApiResponse<>(true, result, null);
+
+        return result;
     }
 }
