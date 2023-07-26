@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sparta.kingdombe.domain.like.service.LikeService;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
+import sparta.kingdombe.global.utils.ResponseUtils;
 
 @RestController
 @RequestMapping("/api/stories")
@@ -21,6 +22,6 @@ public class LikeController {
     @PostMapping("/{storyId}/like")
     public ApiResponse<?> updateLike(@PathVariable Long storyId,
                                      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return likeService.updateLike(storyId, userDetailsImpl.getUser());
+        return ResponseUtils.ok(likeService.updateLike(storyId, userDetailsImpl.getUser()));
     }
 }

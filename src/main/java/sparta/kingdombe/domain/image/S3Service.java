@@ -1,4 +1,4 @@
-package sparta.kingdombe.domain.story.service;
+package sparta.kingdombe.domain.image;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;

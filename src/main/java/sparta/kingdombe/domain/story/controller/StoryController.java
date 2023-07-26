@@ -22,12 +22,12 @@ public class StoryController {
     @GetMapping
     public ApiResponse<?> readAllStory(@RequestParam("page") int page,
                                        @RequestParam("size") int size) {
-        return storyService.findAllStory(page - 1, size); // ?page=1&size=10
+        return ResponseUtils.ok(storyService.findAllStory(page - 1, size)); // ?page=1&size=10
     }
 
     @GetMapping("/{storyId}")
     public ApiResponse<?> readOneStory(@PathVariable Long storyId) {
-        return storyService.findOnePost(storyId);
+        return ResponseUtils.ok(storyService.findOnePost(storyId));
     }
 
     @PostMapping("/newstory")
@@ -35,7 +35,7 @@ public class StoryController {
                                       @RequestPart(value = "file", required = false) MultipartFile image,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 
-        return storyService.createStory(storyRequestDto, image, userDetailsImpl.getUser());
+        return ResponseUtils.ok(storyService.createStory(storyRequestDto, image, userDetailsImpl.getUser()));
     }
 
     @PatchMapping("/{storyId}")
@@ -43,13 +43,13 @@ public class StoryController {
                                       @RequestPart(value = "data") StoryRequestDto storyRequestDto,
                                       @RequestPart(value = "file", required = false) MultipartFile file,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return storyService.updateStory(storyId, storyRequestDto, file, userDetailsImpl.getUser());
+        return ResponseUtils.ok(storyService.updateStory(storyId, storyRequestDto, file, userDetailsImpl.getUser()));
     }
 
     @DeleteMapping("/{storyId}")
     public ApiResponse<?> deleteStory(@PathVariable Long storyId,
                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        return storyService.deleteStory(storyId, userDetailsImpl.getUser());
+        return ResponseUtils.ok(storyService.deleteStory(storyId, userDetailsImpl.getUser()));
     }
 
     @GetMapping("/search")

@@ -20,7 +20,7 @@ import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
-import sparta.kingdombe.domain.story.service.S3Service;
+import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
@@ -40,20 +40,19 @@ public class JobService {
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public ApiResponse<?> findAllJobInfo(int page) {
+    public Page<JobAllResponseDto> findAllJobInfo(int page) {
 
-        Pageable pageable =  PageRequest.of(page,5);
+        Pageable pageable =  PageRequest.of(page,20);
         Page<JobInfo> jobInfoPage = jobRepository.findAll(pageable);
 
-        List<JobAllResponseDto> jobInfoList = jobInfoPage
-                .stream()
+        List<JobAllResponseDto> jobInfoList = jobInfoPage.stream()
                 .map(JobAllResponseDto::new)
                 .collect(Collectors.toList());
 
         int totalPage = jobInfoPage.getTotalPages();
-        PageImpl pageimpl = new PageImpl<>(jobInfoList, pageable, totalPage);
-        // 해당 페이지에 들어갈 내용(리스트) , 오청한 페이지 정보 , 들어갈 내용들의 양
-        return ok(pageimpl);
+
+        // 해당 페이지에 들어갈 내용(리스트) , 요청한 페이지 정보 , 들어갈 내용들의 양
+        return new PageImpl<>(jobInfoList, pageable, totalPage);
     }
 
     public ApiResponse<?> findJobInfoById(Long id) {
