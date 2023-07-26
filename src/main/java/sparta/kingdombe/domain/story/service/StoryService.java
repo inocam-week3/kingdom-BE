@@ -1,13 +1,11 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
