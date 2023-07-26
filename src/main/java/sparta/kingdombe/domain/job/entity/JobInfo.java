@@ -40,7 +40,7 @@ public class JobInfo extends Timestamped {
     @Column(nullable = false)
     private Date recruitmentEndPeriod;
     @Column(nullable = false)
-    private Long recruitmentPersonNum;
+    private String recruitmentPersonNum;
 
     @Column(nullable = false)
     private Long salary;
