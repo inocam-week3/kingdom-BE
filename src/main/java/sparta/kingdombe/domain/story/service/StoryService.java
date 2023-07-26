@@ -19,6 +19,8 @@ import sparta.kingdombe.domain.user.entity.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.DELETE_SUCCESS;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -70,7 +72,7 @@ public class StoryService {
         Story story = confirmStory(storyId, user);
         deleteImage(story);
         storyRepository.delete(story);
-        return "삭제 완료";
+        return DELETE_SUCCESS.getMessage();
     }
 
     private void updateStoryDetail(StoryRequestDto storyRequestDto, MultipartFile image, Story story) {

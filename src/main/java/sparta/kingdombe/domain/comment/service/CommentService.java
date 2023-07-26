@@ -11,8 +11,12 @@ import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
+import sparta.kingdombe.global.exception.buisnessException.UnauthorizedException;
+import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
 import sparta.kingdombe.global.responseDto.ApiResponse;
+import sparta.kingdombe.global.stringCode.SuccessCodeEnum;
 
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.*;
 import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 
 @Service
@@ -40,18 +44,18 @@ public class CommentService {
     public String deleteComment(Long commentId, User user) {
         Comment comment = confirmComment(commentId, user);
         commentRepository.delete(comment);
-        return "삭제 완료";
+        return DELETE_SUCCESS.getMessage();
     }
 
     private Story findStory(Long storyId) {
         return storyRepository.findById(storyId).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
+                new DataNotFoundException("존재하지 않는 게시물입니다"));
     }
 
     private Comment confirmComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다"));
         if (!(comment.getUser().getId().equals(user.getId()))) {
-            throw new IllegalArgumentException("댓글 작성자만 수정,삭제가 가능합니다");
+            throw new UnauthorizedException("작성자만 수정,삭제가 가능합니다");
         }
         return comment;
     }
