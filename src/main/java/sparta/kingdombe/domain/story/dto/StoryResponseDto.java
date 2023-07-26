@@ -26,6 +26,7 @@ public class StoryResponseDto {
     private LocalDateTime createdAt;
     private List<CommentResponseDto> commentList;
     private long viewCount;
+    private boolean userLikes;
 
     public StoryResponseDto (Story story) {
         this.id = story.getId();
@@ -37,6 +38,20 @@ public class StoryResponseDto {
         this.viewCount = story.getViewCount();
         this.image = story.getImage();
         this.commentList = story.getCommentList().stream().map(CommentResponseDto::new).toList();
+        this.userLikes = false;
+    }
+
+    public StoryResponseDto(Story story, boolean isLike) {
+        this.id = story.getId();
+        this.title = story.getTitle();
+        this.content = story.getContent();
+        this.liked = story.getLiked();
+        this.username = story.getUser().getUsername();
+        this.createdAt = story.getCreatedAt();
+        this.viewCount = story.getViewCount();
+        this.image = story.getImage();
+        this.commentList = story.getCommentList().stream().map(CommentResponseDto::new).toList();
+        this.userLikes = isLike;
     }
 
     public StoryResponseDto All(Story story) {
