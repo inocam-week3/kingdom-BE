@@ -27,19 +27,19 @@ public class JobController {
                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
                                     @RequestPart(value = "file2", required = false) MultipartFile multipartFile2,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return jobService.createJob(jobRequestDto, multipartFile, multipartFile2, userDetails.getUser());
+        return ResponseUtils.ok(jobService.createJob(jobRequestDto, multipartFile, multipartFile2, userDetails.getUser()));
     }
 
     // 채용 정보 조회
     @GetMapping
     public ApiResponse<?> getJob(@RequestParam("page") int page) {
-        return jobService.findAllJobInfo(page);
+        return ResponseUtils.ok(jobService.findAllJobInfo(page));
     }
 
     // 채용 정보 상세조회
     @GetMapping("/{jobId}")
     public ApiResponse<?> getSelectJob(@PathVariable("jobId") Long id) {
-        return jobService.findJobInfoById(id);
+        return ResponseUtils.ok(jobService.findJobInfoById(id));
     }
 
     // 채용 정보 수정
@@ -49,14 +49,14 @@ public class JobController {
                                     @RequestPart(value = "file", required = false) MultipartFile multipartFile,
                                     @RequestPart(value = "file2", required = false) MultipartFile multipartFile2,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return jobService.update(id, jobRequestDto, multipartFile, multipartFile2, userDetails.getUser());
+        return ResponseUtils.ok(jobService.update(id, jobRequestDto, multipartFile, multipartFile2, userDetails.getUser()));
     }
 
     // 채용 정보 삭제
     @DeleteMapping("/{jobId}")
     public ApiResponse<?> deleteJob(@PathVariable("jobId") Long id,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return jobService.delete(id, userDetails.getUser());
+        return ResponseUtils.ok(jobService.delete(id, userDetails.getUser()));
     }
 
     @GetMapping("/search")

@@ -2,6 +2,7 @@ package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class StoryService {
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public List<StoryResponseDto> findAllStory(int page, int size) {
+    public Page<StoryResponseDto> findAllStory(int page) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, 20);
         Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
@@ -48,8 +49,10 @@ public class StoryService {
                         .commentList(story.getCommentList().stream().map(CommentResponseDto::new).toList())
                         .build())
                 .collect(Collectors.toList());
-        ;
-        return result;
+
+        int totalPages = storyList.getTotalPages();
+
+        return new PageImpl<>(result, pageable, totalPages);
     }
 
     public StoryResponseDto findOnePost(Long storyId) {

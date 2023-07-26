@@ -20,9 +20,8 @@ public class StoryController {
     private final StoryService storyService;
 
     @GetMapping
-    public ApiResponse<?> readAllStory(@RequestParam("page") int page,
-                                       @RequestParam("size") int size) {
-        return ResponseUtils.ok(storyService.findAllStory(page - 1, size)); // ?page=1&size=10
+    public ApiResponse<?> readAllStory(@RequestParam("page") int page) {
+        return ResponseUtils.ok(storyService.findAllStory(page));
     }
 
     @GetMapping("/{storyId}")

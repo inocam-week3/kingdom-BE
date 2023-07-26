@@ -55,32 +55,32 @@ public class JobService {
         return new PageImpl<>(jobInfoList, pageable, totalPage);
     }
 
-    public ApiResponse<?> findJobInfoById(Long id) {
-        return ok(new JobResponseDto(findJobInfo(id)));
+    public JobResponseDto findJobInfoById(Long id) {
+        return new JobResponseDto(findJobInfo(id));
     }
 
-    public ApiResponse<?> createJob(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
+    public JobResponseDto createJob(JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
         String image = s3Service.upload(multipartFile);
         String image2 = s3Service.upload(multipartFile2);
         JobInfo jobInfo = new JobInfo(jobRequestDto, image, image2, user);
         jobRepository.save(jobInfo);
-        return okWithMessage(JOB_CREATE_SUCCESS);
+        return new JobResponseDto(jobInfo);
     }
 
 
-    public ApiResponse<?> update(Long id, JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
+    public JobResponseDto update(Long id, JobRequestDto jobRequestDto, MultipartFile multipartFile, MultipartFile multipartFile2, User user) {
         JobInfo jobinfo = findJobInfo(id);
         checkUsername(id, user);
         updateStoryDetail(jobRequestDto, multipartFile, multipartFile2, jobinfo);
-        return okWithMessage(JOB_MODIFY_SUCCESS);
+        return new JobResponseDto(jobinfo);
     }
 
-    public ApiResponse<?> delete(Long id, User user) {
+    public String delete(Long id, User user) {
         JobInfo jobInfo = findJobInfo(id);
         checkUsername(id, user);
         deleteImage(jobInfo);
         jobRepository.delete(jobInfo);
-        return okWithMessage(JOB_DELETE_SUCCESS);
+        return "삭제완료";
     }
 
     private void deleteImage(JobInfo jobInfo) {
