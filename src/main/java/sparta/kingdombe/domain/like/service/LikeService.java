@@ -9,6 +9,7 @@ import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
+import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
 import static sparta.kingdombe.global.utils.ResponseUtils.ok;
@@ -23,7 +24,7 @@ public class LikeService {
 
     public StoryResponseDto updateLike(Long storyId, User user) {
         Story story = storyRepository.findById(storyId).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
+                new DataNotFoundException("존재하지 않는 게시물입니다"));
         boolean isLike = false;
 
         if (!isLikedStory(story, user)) {

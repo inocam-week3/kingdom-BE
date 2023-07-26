@@ -18,7 +18,9 @@ import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
 import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
+import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
 import sparta.kingdombe.global.responseDto.ApiResponse;
+import sparta.kingdombe.global.stringCode.SuccessCodeEnum;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +78,7 @@ public class JobService {
         checkUsername(id, user);
         deleteImage(jobInfo);
         jobRepository.delete(jobInfo);
-        return "삭제완료";
+        return DELETE_SUCCESS.getMessage();
     }
 
     private void deleteImage(JobInfo jobInfo) {
@@ -110,14 +112,14 @@ public class JobService {
 
     private JobInfo findJobInfo(Long id) {
         return jobRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 채용 공고는 존재하지 않습니다.")
+                new DataNotFoundException("존재하지 않는 게시물입니다")
         );
     }
 
     private void checkUsername(Long id, User user) {
        JobInfo jobInfo = findJobInfo(id);
         if (!(jobInfo.getUser().getId().equals(user.getId())))
-            throw new IllegalArgumentException("채용공고는 작성자만 수정,삭제가 가능합니다");
+            throw new DataNotFoundException("작성자만 수정,삭제가 가능합니다");
     }
 
     public Page<JobAllResponseDto> searchJobInfo(JobSearchCondition condition, Pageable pageable) {
