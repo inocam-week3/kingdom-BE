@@ -17,7 +17,7 @@ public class JobRequestDto {
     Long salary;
     Date recruitmentstartperiod;
     Date recruitmentendperiod;
-    Long recruitmentpersonnum;
+    String recruitmentpersonnum;
 
 
 }

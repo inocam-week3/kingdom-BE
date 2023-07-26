@@ -19,7 +19,7 @@ public class JobResponseDto {
     private String manageremail;
     private Date recruitstartperiod;
     private Date recruitendperiod;
-    private Long recruitpersonnum;
+    private String recruitpersonnum;
     private Long salary;
     private LocalDateTime createdAt;
 
