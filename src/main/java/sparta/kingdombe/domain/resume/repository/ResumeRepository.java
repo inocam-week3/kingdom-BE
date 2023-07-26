@@ -14,9 +14,6 @@ import java.util.Optional;
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
-    @Query("select r from Resume r where r.id = :resumeid")
-    Optional<Resume> findDetailResume(@Param("resumeid") Long resumeid);
-
     @Query("select r from Resume r where r.career = :career")
     List<Resume> findByCareer(@Param("career") String career);
 

@@ -31,8 +31,8 @@ public class JobController {
     }
 
     // 채용 정보 조회
-    @GetMapping("/search")
-    public ApiResponse<?> getJob(@RequestParam("career") int page) {
+    @GetMapping
+    public ApiResponse<?> getJob(@RequestParam("page") int page) {
         return jobService.findAllJobInfo(page);
     }
 
