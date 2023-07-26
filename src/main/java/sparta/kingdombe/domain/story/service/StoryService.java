@@ -22,15 +22,16 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class StoryService {
 
     private final StoryRepository storyRepository;
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public Page<StoryResponseDto> findAllStory(int page) {
+    public Page<StoryResponseDto> findAllStory(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
@@ -38,9 +39,10 @@ public class StoryService {
                 .map(story -> new StoryResponseDto().All(story))
                 .collect(Collectors.toList());
 
-        int totalPages = storyList.getTotalPages();
 
-        return new PageImpl<>(result, pageable, totalPages);
+        long total = storyList.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
     }
 
     public StoryResponseDto findOnePost(Long storyId) {
