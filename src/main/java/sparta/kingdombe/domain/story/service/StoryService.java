@@ -1,6 +1,7 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,9 @@ public class StoryService {
             // 새로운 이미지 업로드 후에 기존 이미지 삭제
             if (StringUtils.hasText(existingImageUrl)) {
                 s3Service.delete(existingImageUrl);
+            }
+            if(StringUtils.hasText(storyRequestDto.getContent())) {
+                story.updateContent(storyRequestDto.getContent());
             }
         }
         story.update(storyRequestDto);

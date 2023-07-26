@@ -83,4 +83,8 @@ public class Story extends Timestamped {
     public void updateImage(String imageUrl) {
         this.image = imageUrl;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
