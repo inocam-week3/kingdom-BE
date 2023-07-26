@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.utils.Timestamped;
@@ -63,9 +62,9 @@ public class JobInfo extends Timestamped {
         this.title = jobRequestDto.getTitle();
         this.location = jobRequestDto.getLocation();
         this.content = jobRequestDto.getContent();
-        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
-        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
-        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentStartPeriod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentEndPeriod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentPersonNum();
         this.salary = jobRequestDto.getSalary();
         this.companyname = jobRequestDto.getCompanyname();
         this.logoImage = image;
@@ -77,9 +76,9 @@ public class JobInfo extends Timestamped {
         this.title = jobRequestDto.getTitle();
         this.location = jobRequestDto.getLocation();
         this.content = jobRequestDto.getContent();
-        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
-        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
-        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentStartPeriod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentEndPeriod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentPersonNum();
         this.salary = jobRequestDto.getSalary();
         this.companyname = jobRequestDto.getCompanyname();
         this.logoImage = image;
@@ -90,9 +89,9 @@ public class JobInfo extends Timestamped {
         this.title = jobRequestDto.getTitle();
         this.location = jobRequestDto.getLocation();
         this.content = jobRequestDto.getContent();
-        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentstartperiod();
-        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentendperiod();
-        this.recruitmentPersonNum = jobRequestDto.getRecruitmentpersonnum();
+        this.recruitmentStartPeriod = jobRequestDto.getRecruitmentStartPeriod();
+        this.recruitmentEndPeriod = jobRequestDto.getRecruitmentEndPeriod();
+        this.recruitmentPersonNum = jobRequestDto.getRecruitmentPersonNum();
         this.salary = jobRequestDto.getSalary();
         this.companyname = jobRequestDto.getCompanyname();
     }
