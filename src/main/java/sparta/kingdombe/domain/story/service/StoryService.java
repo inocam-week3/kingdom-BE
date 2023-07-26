@@ -34,7 +34,7 @@ public class StoryService {
     public ApiResponse<?> findAllStory(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Story> storyList = storyRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
                 .stream()

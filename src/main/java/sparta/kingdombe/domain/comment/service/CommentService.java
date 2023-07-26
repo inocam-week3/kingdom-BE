@@ -24,23 +24,23 @@ public class CommentService {
     private final StoryRepository storyRepository;
 
 
-    public ApiResponse<?> createComment(Long storyId, CommentRequestDto commentRequestDto, User user) {
+    public CommentResponseDto createComment(Long storyId, CommentRequestDto commentRequestDto, User user) {
         Story story = findStory(storyId);
         Comment comment = new Comment(story, commentRequestDto, user);
         commentRepository.save(comment);
-        return ok(new CommentResponseDto(comment));
+        return new CommentResponseDto(comment);
     }
 
-    public ApiResponse<?> updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto, User user) {
         Comment comment = confirmComment(commentId, user);
         comment.update(commentRequestDto);
-        return ok(new CommentResponseDto(comment));
+        return new CommentResponseDto(comment);
     }
 
-    public ApiResponse<?> deleteComment(Long commentId, User user) {
+    public String deleteComment(Long commentId, User user) {
         Comment comment = confirmComment(commentId, user);
         commentRepository.delete(comment);
-        return ok("삭제 완료");
+        return "삭제 완료";
     }
 
     private Story findStory(Long storyId) {

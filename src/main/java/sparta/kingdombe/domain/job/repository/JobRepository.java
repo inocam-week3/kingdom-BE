@@ -3,6 +3,7 @@ package sparta.kingdombe.domain.job.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface JobRepository extends JpaRepository<JobInfo, Long>, JobReposito
 
     List<JobInfo> findAll();
 
-    Page<JobInfo> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    @Query("select j from JobInfo j order by j.id DESC limit 40")
+    List<JobInfo> findJobInfoAtHome();
 }
