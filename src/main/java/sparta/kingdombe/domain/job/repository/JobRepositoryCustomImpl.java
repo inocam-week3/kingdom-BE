@@ -80,7 +80,7 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
         return salaryCond != null ? jobInfo.salary.goe(salaryCond) : null;
     }
 
-    private BooleanExpression personNumGoe(Long personNumCond) {
-        return personNumCond != null ? jobInfo.recruitmentPersonNum.goe(personNumCond) : null;
+    private BooleanExpression personNumGoe(String personNumCond) {
+        return hasText(personNumCond) ? jobInfo.recruitmentPersonNum.goe(Long.valueOf(personNumCond)) : null;
     }
 }
