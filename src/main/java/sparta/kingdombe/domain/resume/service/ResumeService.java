@@ -25,7 +25,7 @@ public class ResumeService {
     @Transactional(readOnly = true)
     public Page<ResumeResponseDto> findAllResume(int page) {
 
-        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<Resume> resumeList = resumeRepository.findAll(pageable);
 
         List<ResumeResponseDto> result = resumeList.stream()

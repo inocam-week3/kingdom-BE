@@ -30,7 +30,7 @@ public class StoryService {
     @Transactional(readOnly = true)
     public Page<StoryResponseDto> findAllStory(int page) {
 
-        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList

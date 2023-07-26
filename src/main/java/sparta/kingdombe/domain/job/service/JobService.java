@@ -38,7 +38,7 @@ public class JobService {
     @Transactional(readOnly = true)
     public Page<JobAllResponseDto> findAllJobInfo(int page) {
 
-        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<JobInfo> jobInfoPage = jobRepository.findAll(pageable);
 
         List<JobAllResponseDto> jobInfoList = jobInfoPage.stream()
