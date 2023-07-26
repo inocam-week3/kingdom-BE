@@ -1,11 +1,11 @@
 package sparta.kingdombe.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import sparta.kingdombe.global.exception.buisnessException.ConditionDisagreeException;
 import sparta.kingdombe.global.exception.buisnessException.UnauthorizedException;
 import sparta.kingdombe.global.exception.buisnessException.UploadException;
 import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
@@ -38,6 +38,13 @@ public class KingdomExceptionHandler {
     public ApiResponse<?> handleDataNotFoundException(DataNotFoundException e) {
         log.error("error message = {}", e.getMessage());
         return ResponseUtils.error(e.getMessage(), NOT_FOUND.value());
+    }
+
+    @ExceptionHandler(ConditionDisagreeException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ApiResponse<?> handleConditionDisagreeException(ConditionDisagreeException e) {
+        log.error("error message = {}", e.getMessage());
+        return ResponseUtils.error(e.getMessage(), BAD_REQUEST.value());
     }
 
     @ExceptionHandler(RuntimeException.class)

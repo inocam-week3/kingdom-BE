@@ -20,6 +20,7 @@ import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.domain.user.entity.UserGenderEnum;
 import sparta.kingdombe.domain.user.entity.UserRoleEnum;
 import sparta.kingdombe.domain.user.repository.UserRepository;
+import sparta.kingdombe.global.exception.buisnessException.ConditionDisagreeException;
 import sparta.kingdombe.global.jwt.JwtProvider;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 
@@ -75,7 +76,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "ca694ae46e22b997351afa5a92c6c63a");
-        body.add("redirect_uri", "http://44.211.246.195/api/auth/kakao");
+        body.add("redirect_uri", "http://3.34.136.177/api/auth/kakao");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -120,17 +121,22 @@ public class KakaoService {
         );
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
-        Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
-        String gender = jsonNode.get("kakao_account")
-                        .get("gender").asText();
-        UserGenderEnum genderEnum = gender.equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+        try {
+            Long id = jsonNode.get("id").asLong();
+            String nickname = jsonNode.get("properties")
+                    .get("nickname").asText();
+            String email = jsonNode.get("kakao_account")
+                    .get("email").asText();
+            String gender = jsonNode.get("kakao_account")
+                    .get("gender").asText();
 
-        log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
-        return new KakaoUserInfoDto(id, nickname, email, genderEnum);
+            UserGenderEnum genderEnum = gender.equals("male") ? UserGenderEnum.MALE : UserGenderEnum.FEMALE;
+
+            log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
+            return new KakaoUserInfoDto(id, nickname, email, genderEnum);
+        }catch (Exception e){
+            throw new ConditionDisagreeException("권한을 허용해 주세요", e);
+        }
     }
 
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
