@@ -17,6 +17,8 @@ public class JobRequestDto {
     Date recruitmentStartPeriod;
     Date recruitmentEndPeriod;
     String recruitmentPersonNum;
+    String managerName;
+    String managerEmail;
 
 
 }

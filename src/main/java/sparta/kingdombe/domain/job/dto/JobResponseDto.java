@@ -33,8 +33,8 @@ public class JobResponseDto {
         this.title = jobInfo.getTitle();
         this.content = jobInfo.getContent();
         this.location = jobInfo.getLocation();
-        this.managername = jobInfo.getUser().getUsername();
-        this.manageremail = jobInfo.getUser().getEmail();
+        this.managername = jobInfo.getManagerName();
+        this.manageremail = jobInfo.getManagerEmail();
         this.recruitstartperiod = jobInfo.getRecruitmentStartPeriod();
         this.recruitendperiod = jobInfo.getRecruitmentEndPeriod();
         this.recruitpersonnum = jobInfo.getRecruitmentPersonNum();

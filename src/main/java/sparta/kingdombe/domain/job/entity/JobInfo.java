@@ -53,6 +53,9 @@ public class JobInfo extends Timestamped {
     @Column
     private String workInfraImage;
 
+    private String managerName;
+    private String managerEmail;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -69,6 +72,8 @@ public class JobInfo extends Timestamped {
         this.companyname = jobRequestDto.getCompanyname();
         this.logoImage = image;
         this.workInfraImage = image2;
+        this.managerName = jobRequestDto.getManagerName();
+        this.managerEmail = jobRequestDto.getManagerEmail();
         this.user = user;
     }
 
