@@ -1,14 +1,13 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.image.S3Service;
+import sparta.kingdombe.domain.like.repository.LikeRepository;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 public class StoryService {
 
     private final StoryRepository storyRepository;
+    private final LikeRepository likeRepository;
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
@@ -43,10 +43,11 @@ public class StoryService {
         return new PageImpl<>(result, pageable, totalPages);
     }
 
-    public StoryResponseDto findOnePost(Long storyId) {
+    public StoryResponseDto findOnePost(Long storyId, Long userId) {
         Story story = findStory(storyId);
         story.increaseViewCount();
-        return new StoryResponseDto(story);
+        boolean isLike = likeRepository.findByStoryIdAndUserId(storyId, userId).isPresent();
+        return new StoryResponseDto(story, isLike);
     }
 
     public StoryResponseDto createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {

@@ -24,16 +24,22 @@ public class LikeService {
     public StoryResponseDto updateLike(Long storyId, User user) {
         Story story = storyRepository.findById(storyId).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시글은 존재하지 않습니다"));
+        boolean isLike = false;
 
         if (!isLikedStory(story, user)) {
             createLike(story, user);
             story.increaseLike();
-            return new StoryResponseDto(story);
+            isLike = true;
+            return new StoryResponseDto(story, isLike);
         }
 
         removeLike(story, user);
         story.decreaseLike();
-        return new StoryResponseDto(story);
+        return new StoryResponseDto(story, isLike);
+    }
+
+    private boolean isLikedStoryId(Long storyId, Long id) {
+        return likeRepository.findByStoryIdAndUserId(storyId, id).isPresent();
     }
 
     private boolean isLikedStory(Story story, User user) {
