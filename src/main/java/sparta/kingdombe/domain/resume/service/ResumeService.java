@@ -9,11 +9,13 @@ import sparta.kingdombe.domain.resume.dto.ResumeResponseDto;
 import sparta.kingdombe.domain.resume.entity.Resume;
 import sparta.kingdombe.domain.resume.repository.ResumeRepository;
 import sparta.kingdombe.domain.user.entity.User;
-import sparta.kingdombe.global.exception.InvalidConditionException;
-import sparta.kingdombe.global.stringCode.ErrorCodeEnum;
+import sparta.kingdombe.global.exception.buisnessException.UnauthorizedException;
+import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.DELETE_SUCCESS;
 
 @Service
 @Transactional
@@ -41,7 +43,7 @@ public class ResumeService {
     @Transactional(readOnly = true)
     public ResumeResponseDto getSelectedResume(Long resumeId) {
         Resume resume = resumeRepository.findById(resumeId)
-                .orElseThrow(() -> new InvalidConditionException(ErrorCodeEnum.POST_NOT_EXIST));
+                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 게시물입니다"));
         return new ResumeResponseDto(resume);
     }
 
@@ -65,18 +67,18 @@ public class ResumeService {
         Resume resume = findResume(resumeId);
         checkUsername(resumeId, user);
         resumeRepository.delete(resume);
-        return "삭제 완료";
+        return DELETE_SUCCESS.getMessage();
     }
 
     private Resume findResume(Long resumeId) {
         return resumeRepository.findById(resumeId).orElseThrow(() ->
-                new InvalidConditionException(ErrorCodeEnum.POST_NOT_EXIST));
+                new DataNotFoundException("존재하지 않는 게시물입니다"));
     }
 
     private void checkUsername(Long resumeId, User user) {
         Resume resume = findResume(resumeId);
         if (!(resume.getUser().getId().equals(user.getId()))) {
-            throw new InvalidConditionException(ErrorCodeEnum.USER_NOT_MATCH);
+            throw new UnauthorizedException("작성자만 수정,삭제가 가능합니다");
         }
     }
 

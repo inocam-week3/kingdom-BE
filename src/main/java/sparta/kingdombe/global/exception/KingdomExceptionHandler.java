@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import sparta.kingdombe.global.exception.buisnessException.UnauthorizedException;
+import sparta.kingdombe.global.exception.buisnessException.UploadException;
+import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.utils.ResponseUtils;
 
@@ -16,19 +19,26 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class KingdomExceptionHandler {
 
-
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ResponseEntity handleIllegalArgumentException(IllegalArgumentException e){
-//        return ResponseEntity.badRequest().body(e.getMessage());
-//    }
-
-    @ExceptionHandler(InvalidConditionException.class)
-    @ResponseStatus(BAD_REQUEST)
-    public ApiResponse<?> handleInvalidConditionException(InvalidConditionException e) {
-        return ResponseUtils.customError(e.errorCodeEnum);
+    @ExceptionHandler(UploadException.class)
+    @ResponseStatus(BAD_GATEWAY)
+    public ApiResponse<?> handleUploadException(UploadException e) {
+        log.error("error message = {}", e.getMessage());
+        return ResponseUtils.error(e.getMessage(), BAD_REQUEST.value());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(UNAUTHORIZED)
+    public ApiResponse<?> handleUnauthorizedException(UnauthorizedException e) {
+        log.error("error message = {}", e.getMessage());
+        return ResponseUtils.error(e.getMessage(), UNAUTHORIZED.value());
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ApiResponse<?> handleDataNotFoundException(DataNotFoundException e) {
+        log.error("error message = {}", e.getMessage());
+        return ResponseUtils.error(e.getMessage(), NOT_FOUND.value());
+    }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(BAD_REQUEST)
