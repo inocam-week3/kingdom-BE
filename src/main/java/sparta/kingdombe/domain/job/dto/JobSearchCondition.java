@@ -11,5 +11,5 @@ public class JobSearchCondition {
     private String title;
     private String location;
     private Long salary;
-    private Long recruitpersonnum;
+    private String recruitpersonnum;
 }
