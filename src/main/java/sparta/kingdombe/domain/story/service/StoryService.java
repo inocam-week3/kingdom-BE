@@ -83,6 +83,9 @@ public class StoryService {
             if (StringUtils.hasText(existingImageUrl)) {
                 s3Service.delete(existingImageUrl);
             }
+            if(StringUtils.hasText(storyRequestDto.getContent())) {
+                story.updateContent(storyRequestDto.getContent());
+            }
         }
         story.update(storyRequestDto);
     }
