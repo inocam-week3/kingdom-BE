@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.image.S3Service;
+import sparta.kingdombe.domain.like.repository.LikeRepository;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
@@ -20,15 +21,17 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class StoryService {
 
     private final StoryRepository storyRepository;
+    private final LikeRepository likeRepository;
     private final S3Service s3Service;
 
     @Transactional(readOnly = true)
-    public Page<StoryResponseDto> findAllStory(int page) {
+    public Page<StoryResponseDto> findAllStory(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
@@ -36,15 +39,17 @@ public class StoryService {
                 .map(story -> new StoryResponseDto().All(story))
                 .collect(Collectors.toList());
 
-        int totalPages = storyList.getTotalPages();
 
-        return new PageImpl<>(result, pageable, totalPages);
+        long total = storyList.getTotalElements();
+
+        return new PageImpl<>(result, pageable, total);
     }
 
-    public StoryResponseDto findOnePost(Long storyId) {
+    public StoryResponseDto findOnePost(Long storyId, Long userId) {
         Story story = findStory(storyId);
         story.increaseViewCount();
-        return new StoryResponseDto(story);
+        boolean isLike = likeRepository.findByStoryIdAndUserId(storyId, userId).isPresent();
+        return new StoryResponseDto(story, isLike);
     }
 
     public StoryResponseDto createStory(StoryRequestDto storyRequestDto, MultipartFile file, User user) {

@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByStoryAndUser(Story story, User user);
+
+    Optional<Like> findByStoryIdAndUserId(Long storyId, Long id);
 }

@@ -25,6 +25,6 @@ public class HomeJobResponseDto {
         this.location = jobInfo.getLocation();
         this.salary = jobInfo.getSalary();
 //        this.workInfraImage = jobInfo.getWorkInfraImage();
-        this.jobdetailurl = "http://localhost:8080/api/job/" + jobInfo.getId();
+        this.jobdetailurl = "http://44.211.246.195/api/job/" + jobInfo.getId();
     }
 }

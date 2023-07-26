@@ -23,18 +23,18 @@ public class ResumeService {
 
     // 전제 조회
     @Transactional(readOnly = true)
-    public Page<ResumeResponseDto> findAllResume(int page) {
+    public Page<ResumeResponseDto> findAllResume(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(Sort.Direction.DESC, "id"));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Resume> resumeList = resumeRepository.findAll(pageable);
 
         List<ResumeResponseDto> result = resumeList.stream()
                 .map(ResumeResponseDto::new)
                 .collect(Collectors.toList());
-        int totalPages = resumeList.getTotalPages();
+        long total = resumeList.getTotalElements();
 
         // 전체 페이지 수, 전체 데이터 수와 같은 페이징 정보
-        return new PageImpl<>(result, pageable, totalPages);
+        return new PageImpl<>(result, pageable, total);
     }
 
     // 상세 조회

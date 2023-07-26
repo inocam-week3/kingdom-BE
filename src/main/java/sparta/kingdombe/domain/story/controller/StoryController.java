@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.service.StoryService;
+import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
 import sparta.kingdombe.global.utils.ResponseUtils;
@@ -20,13 +21,18 @@ public class StoryController {
     private final StoryService storyService;
 
     @GetMapping
-    public ApiResponse<?> readAllStory(@RequestParam("page") int page) {
-        return ResponseUtils.ok(storyService.findAllStory(page));
+    public ApiResponse<?> readAllStory(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return ResponseUtils.ok(storyService.findAllStory(page, size));
     }
 
     @GetMapping("/{storyId}")
-    public ApiResponse<?> readOneStory(@PathVariable Long storyId) {
-        return ResponseUtils.ok(storyService.findOnePost(storyId));
+    public ApiResponse<?> readOneStory(@PathVariable Long storyId,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        Long userId = 0L;
+        if (userDetailsImpl != null){
+            userId = userDetailsImpl.getUser().getId();
+        }
+        return ResponseUtils.ok(storyService.findOnePost(storyId, userId));
     }
 
     @PostMapping("/newstory")
