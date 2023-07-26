@@ -10,7 +10,6 @@ import sparta.kingdombe.domain.story.entity.Story;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -40,20 +39,18 @@ public class StoryResponseDto {
         this.commentList = story.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 
-    public static class Builder {
-        private Long id;
-        private String title;
-        private String content;
-        private long liked;
-        private String username;
-        private long viewCount;
-        private LocalDateTime createdAt;
-        private List<CommentResponseDto> commentList;
-        private String image;
-
-        public StoryResponseDto build() {
-            return new StoryResponseDto(id, title, content, liked, username, image, createdAt, commentList, viewCount);
-        }
+    public StoryResponseDto All(Story story) {
+        return new StoryResponseDto()
+                .builder()
+                .id(story.getId())
+                .title(story.getTitle())
+                .content(story.getContent())
+                .liked(story.getLiked())
+                .username(story.getUser().getUsername())
+                .image(story.getImage())
+                .createdAt(story.getCreatedAt())
+                .viewCount(story.getViewCount())
+                .build();
     }
 
     @QueryProjection

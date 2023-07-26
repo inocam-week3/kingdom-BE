@@ -1,10 +1,8 @@
 package sparta.kingdombe.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -32,22 +30,12 @@ public class StoryService {
     @Transactional(readOnly = true)
     public Page<StoryResponseDto> findAllStory(int page) {
 
-        Pageable pageable = PageRequest.of(page, 20);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<Story> storyList = storyRepository.findAll(pageable);
 
         List<StoryResponseDto> result = storyList
                 .stream()
-                .map(story -> StoryResponseDto.builder()
-                        .id(story.getId())
-                        .title(story.getTitle())
-                        .content(story.getContent())
-                        .liked(story.getLiked())
-                        .username(story.getUser().getUsername())
-                        .image(story.getImage())
-                        .createdAt(story.getCreatedAt())
-                        .viewCount(story.getViewCount())
-                        .commentList(story.getCommentList().stream().map(CommentResponseDto::new).toList())
-                        .build())
+                .map(story -> new StoryResponseDto().All(story))
                 .collect(Collectors.toList());
 
         int totalPages = storyList.getTotalPages();

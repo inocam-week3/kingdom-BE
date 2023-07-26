@@ -1,10 +1,7 @@
 package sparta.kingdombe.domain.resume.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sparta.kingdombe.domain.resume.dto.ResumeRequestDto;
@@ -28,7 +25,7 @@ public class ResumeService {
     @Transactional(readOnly = true)
     public Page<ResumeResponseDto> findAllResume(int page) {
 
-        Pageable pageable = PageRequest.of(page, 20);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<Resume> resumeList = resumeRepository.findAll(pageable);
 
         List<ResumeResponseDto> result = resumeList.stream()

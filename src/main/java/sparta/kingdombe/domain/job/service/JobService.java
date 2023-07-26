@@ -2,12 +2,8 @@ package sparta.kingdombe.domain.job.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +38,7 @@ public class JobService {
     @Transactional(readOnly = true)
     public Page<JobAllResponseDto> findAllJobInfo(int page) {
 
-        Pageable pageable =  PageRequest.of(page,20);
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "id"));
         Page<JobInfo> jobInfoPage = jobRepository.findAll(pageable);
 
         List<JobAllResponseDto> jobInfoList = jobInfoPage.stream()
