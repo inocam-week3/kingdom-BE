@@ -17,8 +17,9 @@ public class ResumeController {
 
     // 전체 조회
     @GetMapping
-    public ApiResponse<?> getResumes(@RequestParam("page") int page) {
-        return ResponseUtils.ok(resumeService.findAllResume(page));
+    public ApiResponse<?> getResumes(@RequestParam("page") int page,
+                                     @RequestParam("size") int size) {
+        return ResponseUtils.ok(resumeService.findAllResume(page,size));
     }
 
     // 상세 조회
