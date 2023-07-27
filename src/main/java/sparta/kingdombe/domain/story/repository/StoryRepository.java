@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import sparta.kingdombe.domain.resume.entity.Resume;
 import sparta.kingdombe.domain.story.entity.Story;
 
 import java.util.List;

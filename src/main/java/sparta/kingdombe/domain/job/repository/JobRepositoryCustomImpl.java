@@ -8,18 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import sparta.kingdombe.domain.job.dto.JobAllResponseDto;
-import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.dto.QJobAllResponseDto;
-import sparta.kingdombe.domain.job.entity.JobInfo;
-import sparta.kingdombe.domain.job.entity.QJobInfo;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.util.StringUtils.hasText;
-import static sparta.kingdombe.domain.job.entity.QJobInfo.*;
-import static sparta.kingdombe.domain.story.entity.QStory.story;
+import static sparta.kingdombe.domain.job.entity.QJobInfo.jobInfo;
 
 @RequiredArgsConstructor
 @Slf4j

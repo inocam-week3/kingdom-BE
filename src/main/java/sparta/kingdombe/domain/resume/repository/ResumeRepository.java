@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import sparta.kingdombe.domain.resume.entity.Resume;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, Long> {

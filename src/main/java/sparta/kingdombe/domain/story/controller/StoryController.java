@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sparta.kingdombe.domain.story.dto.StoryRequestDto;
 import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 import sparta.kingdombe.domain.story.service.StoryService;
-import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
 import sparta.kingdombe.global.utils.ResponseUtils;

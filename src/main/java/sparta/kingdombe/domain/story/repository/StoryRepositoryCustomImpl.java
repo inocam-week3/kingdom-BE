@@ -13,7 +13,7 @@ import sparta.kingdombe.domain.story.dto.StorySearchCondition;
 
 import java.util.List;
 
-import static org.springframework.util.StringUtils.*;
+import static org.springframework.util.StringUtils.hasText;
 import static sparta.kingdombe.domain.story.entity.QStory.story;
 
 @RequiredArgsConstructor

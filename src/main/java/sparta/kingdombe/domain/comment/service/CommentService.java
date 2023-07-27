@@ -7,17 +7,13 @@ import sparta.kingdombe.domain.comment.dto.CommentRequestDto;
 import sparta.kingdombe.domain.comment.dto.CommentResponseDto;
 import sparta.kingdombe.domain.comment.entity.Comment;
 import sparta.kingdombe.domain.comment.repository.CommentRepository;
-import sparta.kingdombe.domain.story.dto.StoryResponseDto;
 import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.exception.buisnessException.UnauthorizedException;
 import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
-import sparta.kingdombe.global.responseDto.ApiResponse;
-import sparta.kingdombe.global.stringCode.SuccessCodeEnum;
 
-import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.*;
-import static sparta.kingdombe.global.utils.ResponseUtils.ok;
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.DELETE_SUCCESS;
 
 @Service
 @RequiredArgsConstructor

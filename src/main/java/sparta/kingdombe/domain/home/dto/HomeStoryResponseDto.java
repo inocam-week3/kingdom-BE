@@ -22,7 +22,7 @@ public class HomeStoryResponseDto {
         this.username = story.getUser().getUsername();
         this.createAt = story.getCreatedAt();
         this.content = story.getContent();
-        this.storyDetailUrl = "http://44.211.246.195/api/stories/" + story.getId();
+        this.storyDetailUrl = "http://3.34.136.177/api/stories/" + story.getId();
         this.image = story.getImage();
     }
 

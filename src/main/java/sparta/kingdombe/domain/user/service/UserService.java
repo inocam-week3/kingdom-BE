@@ -11,7 +11,8 @@ import sparta.kingdombe.domain.user.repository.UserRepository;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.stringCode.ErrorCodeEnum;
 
-import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.*;
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.CHECK_EMAIL_SUCCESS;
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.USER_SIGNUP_SUCCESS;
 import static sparta.kingdombe.global.utils.ResponseUtils.customError;
 import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
 

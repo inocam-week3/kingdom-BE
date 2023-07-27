@@ -8,9 +8,8 @@ import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.utils.Timestamped;
 
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @NoArgsConstructor//(access = PROTECTED)

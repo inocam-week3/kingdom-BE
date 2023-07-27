@@ -10,9 +10,6 @@ import sparta.kingdombe.domain.story.entity.Story;
 import sparta.kingdombe.domain.story.repository.StoryRepository;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
-import sparta.kingdombe.global.responseDto.ApiResponse;
-
-import static sparta.kingdombe.global.utils.ResponseUtils.ok;
 
 @Service
 @RequiredArgsConstructor

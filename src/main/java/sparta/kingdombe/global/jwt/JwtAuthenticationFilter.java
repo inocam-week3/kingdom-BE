@@ -16,7 +16,6 @@ import sparta.kingdombe.domain.user.entity.UserRoleEnum;
 import sparta.kingdombe.global.responseDto.ApiResponse;
 import sparta.kingdombe.global.security.UserDetailsImpl;
 
-
 import java.io.IOException;
 
 import static sparta.kingdombe.global.stringCode.ErrorCodeEnum.LOGIN_FAIL;

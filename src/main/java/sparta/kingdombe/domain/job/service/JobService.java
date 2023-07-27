@@ -3,31 +3,24 @@ package sparta.kingdombe.domain.job.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
+import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.job.dto.JobAllResponseDto;
 import sparta.kingdombe.domain.job.dto.JobRequestDto;
 import sparta.kingdombe.domain.job.dto.JobResponseDto;
 import sparta.kingdombe.domain.job.dto.JobSearchCondition;
 import sparta.kingdombe.domain.job.entity.JobInfo;
 import sparta.kingdombe.domain.job.repository.JobRepository;
-import sparta.kingdombe.domain.image.S3Service;
 import sparta.kingdombe.domain.user.entity.User;
 import sparta.kingdombe.global.exception.systemException.DataNotFoundException;
-import sparta.kingdombe.global.responseDto.ApiResponse;
-import sparta.kingdombe.global.stringCode.SuccessCodeEnum;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.*;
-import static sparta.kingdombe.global.utils.ResponseUtils.ok;
-import static sparta.kingdombe.global.utils.ResponseUtils.okWithMessage;
+import static sparta.kingdombe.global.stringCode.SuccessCodeEnum.DELETE_SUCCESS;
 
 @Service
 @Transactional

@@ -2,7 +2,6 @@ package sparta.kingdombe.domain.story.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
@@ -15,9 +14,8 @@ import sparta.kingdombe.global.utils.Timestamped;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.*;
-import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.PROTECTED;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @NoArgsConstructor//(access = PROTECTED)

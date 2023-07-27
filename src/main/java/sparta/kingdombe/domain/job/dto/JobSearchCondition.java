@@ -1,7 +1,6 @@
 package sparta.kingdombe.domain.job.dto;
 
 import lombok.Data;
-
 import lombok.RequiredArgsConstructor;
 
 @Data
