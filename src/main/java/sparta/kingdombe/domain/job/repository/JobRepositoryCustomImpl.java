@@ -48,7 +48,6 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
                         titleLike(condition.getTitle()),
                         locationEq(condition.getLocation()),
                         salaryGoe(condition.getSalary()))
-//                        personNumGoe(condition.getRecruitpersonnum()))
                 .orderBy(jobInfo.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -60,7 +59,6 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
                         titleLike(condition.getTitle()),
                         locationEq(condition.getLocation()),
                         salaryGoe(condition.getSalary()))
-//                        personNumGoe(condition.getRecruitpersonnum()))
                 .fetch()
                 .size();
 
@@ -79,8 +77,4 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom{
     private BooleanExpression salaryGoe(Long salaryCond) {
         return salaryCond != null ? jobInfo.salary.goe(salaryCond) : null;
     }
-
-//    private BooleanExpression personNumGoe(String personNumCond) {
-//        return hasText(personNumCond) ? jobInfo.recruitmentPersonNum.goe(Long.valueOf(personNumCond)) : null;
-//    }
 }
