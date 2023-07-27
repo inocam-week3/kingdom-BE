@@ -1,5 +1,5 @@
 # 알바천국 클론코딩 
-<img src='./src/assets/알바천국.png' width="100%">
+<img src='./src/main/resources/images/알바천국.png' width="100%">
 
 
 ### 1. 프로젝트 개요
