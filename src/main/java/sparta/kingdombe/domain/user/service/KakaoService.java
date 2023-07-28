@@ -41,6 +41,7 @@ public class KakaoService {
     private final JwtProvider jwtProvider;
 
     public ApiResponse<?> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+        // code -> token // token -> 사용자정보 // 사용자정보 회원가입, 로그인 -> jwt 토큰 발급
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String kakaoAccessToken = getToken(code);
 
@@ -51,8 +52,8 @@ public class KakaoService {
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 토큰 반환
-        String accessToken = jwtProvider.createAccessToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender());
-        String refreshToken = jwtProvider.createRefreshToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender());
+        String accessToken = jwtProvider.createAccessToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender()); // 30분
+        String refreshToken = jwtProvider.createRefreshToken(kakaoUser.getEmail(), kakaoUser.getRole(), kakaoUser.getUsername(), kakaoUser.getGender()); // 3일
         jwtProvider.addAccessJwtHeader(accessToken, response);
         jwtProvider.addRefreshJwtHeader(refreshToken, response);
 
@@ -76,7 +77,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "ca694ae46e22b997351afa5a92c6c63a");
-        body.add("redirect_uri", "http://3.34.136.177/api/auth/kakao");
+        body.add("redirect_uri", "http://localhost:3000/auth/kakao");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -145,7 +146,7 @@ public class KakaoService {
         User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
-            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
+            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인 // 이미 가입 email == kakao login email // @kakao, naver
             // 기존 회원가입을 kakaoEmail로 한경우
             String kakaoEmail = kakaoUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
