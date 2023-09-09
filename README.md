@@ -15,7 +15,7 @@
 |:--|:--|:--|
 |Home|김나영|메인페이지|
 |Job, JobDetail|이지원|채용정보에 대한 소개페이지|
-|Resume, ResumeDetail|진민지|인재정보에 대한 소개페이지|
+|Resume, ResumeDetail|진민지,유시환|인재정보에 대한 소개페이지|
 |Story, StoryDetail|김나영, 유시환|알바후기에 대한 커뮤니티페이지|
 |Login, Signup|강영준|로그인페이지|
 
